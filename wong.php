@@ -7,4 +7,5 @@
 7
 8
 test
-ÐÞ¸´bug
+ï¿½Þ¸ï¿½bug
+ignore
