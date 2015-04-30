@@ -2,16 +2,17 @@
 class Request {
 	
 	//请求报文
-	private $heads = array(
+	private $headers = array(
 		'method'=>'get',	
 	);
 
 	//请求协议
 	private	$protocol = 'http';
 	
-	//请求方法
-	private $methods = array('get', 'post');
-
+	//定义允许的请求方法
+	private $methods = array('GET', 'POST');
+	
+	//Singleton pattern
 	private	$instance = NULL;
 	
 	public static function factory() {
@@ -26,6 +27,11 @@ class Request {
 	* @param String $method 请求方式
 	*/
 	public function method($method) {
+		$method = strtoupper($method);
+		if (!in_array($method, $this->methods)) {
+			throw new Ada_Exception('Request method error');
+		}
+		$this->headers['method'] = $method;
 		return	self::$instance;
 	}
 
