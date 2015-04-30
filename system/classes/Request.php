@@ -62,6 +62,12 @@ class Request {
 	private function internal() {
 		//实例化一个路由
 		$route = new route($this);
+		$route->routes(array(
+			array('(<action>)-(<category>).html',array(
+				'action'=>'(list)',
+				'category'=>'[\d]+'
+			),array())	
+		))->matchs();
 		$this->dispatch();
 	}
 

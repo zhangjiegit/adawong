@@ -4,11 +4,14 @@ class	Ada_Route {
 	//路由规则表
 	private $routes = array();
 
+	//
+	private $request = NULL;
+
 	/**
 	* @param Request $request Request对象实例
 	*/
 	public function __construct(Request &$request) {
-	
+		$this->request = $request;
 	}
 
 	/**
@@ -62,11 +65,26 @@ class	Ada_Route {
 		$matchs = array();
 		if ($this->routes) {
 			foreach ($this->routes as $rule) {
-				
+				//定义正则捕获组名 如:(<action>)-(<category>)变成(?<action>)-(?<category>)
+				$pattern = preg_replace('/(?<=[(])(?=[<])/','?', $rule[0]);
+				//定义正则表达式字符范围 如:(?<action>)-(?<category>) 变成 (?<action>[\w]+)-(?<category>[\w]+)
+				if ($rule[1] && is_array($rule[1])) { //用户自定义字符
+					foreach ($rule[1] as $k => $v) {
+						$pattern = preg_replace('/(?<='.$k.'[>])(?=[)])/', $v, $pattern);
+					}
+				} else { //默认[\w]+
+					$pattern = preg_replace('/(?<=[>])(?=[)])/','[\w]+',$pattern);
+				}
+				//将当前路由规格与请求uri进行匹配，如果成功直接返回
+				if(preg_match("/^{$pattern}$/u", $this->request->headers['uri'], $matchs)) {
+					$this->request->route = $matchs;
+					break;
+				}
 			}
 		}
+		//都没有匹配，抛出异常
 		if (!$matchs) {
-			throw	Ada_Exception('Unable to find a route to match');
+			throw	new	Ada_Exception('Unable to find a route to match');
 		}
 	}
 }
