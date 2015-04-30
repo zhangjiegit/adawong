@@ -3,6 +3,13 @@ abstract	class	Ada_Wong {
 	
 	private	static $loadPaths = array(APPPATH, ADAPATH);
 	
+	/**
+	* 查找文件
+	* @param String $file 文件名
+	* @param String $directory 目录
+	* @param String	$ext 扩展名
+	* @return Mixed
+	*/
 	public static function findFile($file, $directory, $ext=NULL) {
 		$file = $directory.DIRECTORY_SEPARATOR.$file.$ext;
 		if (is_file($file) && is_readable($file)) {
@@ -30,7 +37,7 @@ abstract	class	Ada_Wong {
 			//遍历目录，载入类文件
 			foreach (self::$loadPaths as $directory) {
 				$incfile = self::findFile($file, $directory.'classes'.DIRECTORY_SEPARATOR.$path,'.php');
-				if (!class_exists($class) && $incfile) {
+				if (!class_exists($class) && $incfile && is_writeable($incfile)) {
 					return	include $incfile;
 				}
 			}
