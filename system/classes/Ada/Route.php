@@ -52,10 +52,21 @@ class	Ada_Route {
 		}
 		return $this;
 	}
-
+	
+	/**
+	* 验证路由表规则
+	* @param Void
+	* @return Void
+	*/
 	public function matchs() {
+		$matchs = array();
 		if ($this->routes) {
-			
+			foreach ($this->routes as $rule) {
+				
+			}
+		}
+		if (!$matchs) {
+			throw	Ada_Exception('Unable to find a route to match');
 		}
 	}
 }
