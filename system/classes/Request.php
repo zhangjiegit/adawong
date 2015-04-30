@@ -1,6 +1,11 @@
 <?php
 class Request {
 	
+	//请求报文
+	private $heads = array(
+		'method'=>'get',	
+	);
+
 	//请求协议
 	private	$protocol = 'http';
 	
