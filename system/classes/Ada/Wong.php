@@ -23,14 +23,27 @@ abstract	class	Ada_Wong {
 	* @param String $file 文件名
 	* @param String $directory 目录
 	* @param String	$ext 扩展名
-	* @return Mixed
+	* @return Boolean
 	*/
 	public static function loadFile($file, $directory, $ext=NULL) {
-	
+		if (isset(self::$filePaths[$directory],self::$filePaths[$directory][$file])) {
+			return	TRUE;
+		}
+		$file = self::findFile($file, $directory, $ext);
+		if ($file && is_writeable($file)) {
+			if (!isset(self::$filePaths[$directory])) {
+				self::$filePaths[$directory] = array();
+			}
+			self::$filePaths[$directory][] = basename($file);
+			include $file;
+			return	TRUE;
+		}
+		return	FALSE;
 	}
 
 	/**
-	* 自动载入类文件
+	* 自动载入文件
+	* spl_autoload_register(array('Ada_Wong','autoload')); //注册自动载入文件
 	* @param String $class 类名
 	* @return Boolean
 	*/
