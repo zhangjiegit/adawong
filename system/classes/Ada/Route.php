@@ -9,9 +9,10 @@ class	Ada_Route	extends	Ada_Wong {
 		$this->request = $request;
 	}
 	/**
-	* 设置路由uri及规则
+	* setting uri and pattern
 	* $this->routes(array(
-		array('(<directory>)-(<controller>)-(<action>).html',array(),array()),
+		array('(<directory>)-(<controller>)-(<action>)',array(),array()),
+		array('(<action>).html')
 	* ))
 	*/
 	public	function	routes($routes=array()) {
