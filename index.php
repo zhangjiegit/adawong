@@ -1,4 +1,8 @@
 <?php
-define('APPPATH', dirname(__FILE__));
-define('ADAPATH', dirname(__FILE__));
+define('DS',DIRECTORY_SEPARATOR);
+define('APPPATH', dirname(__FILE__).DS.'app'.DS);
+define('ADAPATH', dirname(__FILE__).DS.'system'.DS);
+include	ADAPATH.DS.'classes'.DS.'Ada'.DS.'Wong.php';
+spl_autoload_register(array('Ada_Wong','autoload'));
+adf_a::show();
 ?>
