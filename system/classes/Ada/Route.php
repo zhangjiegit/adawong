@@ -20,7 +20,7 @@ class	Ada_Route	extends	Ada_Wong {
 	}
 
 	/**
-	*
+	* 
 	*/
 	public	function	matchs() {
 		$uri = $this->request->uri;
