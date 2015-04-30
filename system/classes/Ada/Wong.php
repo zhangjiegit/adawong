@@ -11,6 +11,11 @@ abstract	class	Ada_Wong {
 		return	NULL;
 	}
 
+	/**
+	* 自动载入类文件
+	* @param String $class 类名
+	* @return Boolean
+	*/
 	public static function autoLoad($class) {
 		$found = FALSE;
 		if (preg_match('/^(?:[a-z]+(?:_[a-z])*)+$/i', $class)) {
