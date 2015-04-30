@@ -1,7 +1,7 @@
 <?php
 class	Ada_Route	extends	Ada_Wong {
 	
-	private	$rules = array();
+	private	$routes = array();
 
 	private $request = NULL;
 
@@ -11,12 +11,14 @@ class	Ada_Route	extends	Ada_Wong {
 	/**
 	* setting uri and pattern
 	* $this->routes(array(
-		-item-|--------------uri-----------------------|pattean|defualt
-		array('(<directory>)-(<controller>)-(<action>)',array(),array()),
+		array('(<directory>)-(<controller>)-(<action>)', #uri
+				array(),								 #pattrean
+				array()									 #defalt
+		),
 	* ))
 	*/
 	public	function	routes($routes=array()) {
-	
+		$this->routes = $routes;
 	}
 
 	/**
