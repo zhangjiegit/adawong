@@ -88,11 +88,13 @@ class Request {
 			if ($this->headers['method'] === 'POST') { //post方式
 				$header['header'] = 'Content-type:application/x-www-form-urlencoded'; 
 			}
-			$header['content'] = http_build_query($this->headers['params']);
+			if (is_array($this->headers['params'])) {
+				$header['content'] = http_build_query($this->headers['params']);
+			}
 			$stream = stream_context_create(
-				'http' => $header
+				array('http' => $header)
 			);
-			file_get_contents($this->headers['uri'], FALSE, $stream);
+			$content = file_get_contents($this->headers['uri'], FALSE, $stream);
 		}
 		return	$content;
 	}
