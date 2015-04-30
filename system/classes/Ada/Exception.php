@@ -1,4 +1,2 @@
 <?php
-class	Ada_Exception extends	Exception{
-
-}
+class	Ada_Exception extends	Exception{}
