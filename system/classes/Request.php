@@ -12,7 +12,7 @@ class Request {
 	}
 	
 	/**
-	* 定义http协议请求方式,请求方式必须包含在$this->methods属性内
+	* 定义http协议请求方式,请求方式必须是包含在$this->methods属性内
 	* @param String $method 请求方式
 	*/
 	public function method($method) {
