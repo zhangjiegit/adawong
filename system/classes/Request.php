@@ -86,7 +86,7 @@ class Request {
 					'method' => $this->headers['method'],
 			);
 			if ($this->headers['method'] === 'POST') { //post方式
-				$header['header'] = 'Content-type: application/x-www-form-urlencoded'; 
+				$header['header'] = 'Content-type:application/x-www-form-urlencoded'; 
 			}
 			$header['content'] = http_build_query($this->headers['params']);
 			$stream = stream_context_create(
