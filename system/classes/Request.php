@@ -16,12 +16,11 @@ class Request {
 	private	$protocol = 'http';
 	
 	//Singleton pattern
-	private	$instance = NULL;
+	private	static $instance = NULL;
 	
 	public static function factory($uri) {
 		if (self::$instance === NULL) {
-			self::$instance = new Request();
-			$this->uri = $uri;
+			self::$instance = new Request($uri);
 		}
 		return	self::$instance;
 	}
@@ -30,7 +29,7 @@ class Request {
 	* 定义http协议请求方式,请求方式必须是包含在$this->methods属性内
 	* @param String $method 请求方式
 	*/
-	public function method($method) {
+	public function method($method='get') {
 		$method = strtoupper($method);
 		if (!in_array($method, $this->methods)) {
 			throw new Ada_Exception('Request method error');
@@ -45,7 +44,7 @@ class Request {
 	* @return Ref
 	*/
 	public function execute() {
-		if (strpos($uri, $this->protocol) !== FALSE) {
+		if (strpos($this->uri, $this->protocol) !== FALSE) {
 			$this->external(); //内部请求
 		} else {
 			$this->internal(); //外部请求
@@ -72,8 +71,16 @@ class Request {
 	* @return Void
 	*/
 	private function external() {
+		$data = array();
 		if (extension_loaded('curl')) {  //curl
-		
+			$ch = curl_init($this->uri);
+			if ($this->headers['method'] === 'POST') {
+				curl_setopt($ch, CURLOPT_POST, TRUE);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+			}
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+			$this->body = curl_exec($ch);
+			curl_close($ch);
 		} else { //file_get_contents、fsockopen
 			
 		}
@@ -88,7 +95,7 @@ class Request {
 	
 	}
 	
-	private	function __construct() {
-
+	private	function __construct($uri) {
+		$this->uri = $uri;
 	}
 }
