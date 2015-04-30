@@ -7,7 +7,8 @@ class Request {
 	//请求报文
 	private $headers = array(
 		'uri' => '',
-		'method'=>'get',	
+		'method' => 'get',
+		'params' => NULL,
 	);
 
 	//请求协议
@@ -26,13 +27,16 @@ class Request {
 	/**
 	* 定义http协议请求方式,请求方式必须是包含在$this->methods属性内
 	* @param String $method 请求方式
+	* @param Mixed	$params	请求参数
+	* @return Ref
 	*/
-	public function method($method='get') {
+	public function method($method='get', $params = NULL) {
 		$method = strtoupper($method);
 		if (!in_array($method, $this->methods)) {
 			throw new Ada_Exception('Request method error');
 		}
 		$this->headers['method'] = $method;
+		$this->headers['params'] = $params;
 		return	self::$instance;
 	}
 
@@ -72,13 +76,22 @@ class Request {
 			$ch = curl_init($this->headers['uri']);
 			if ($this->headers['method'] === 'POST') {
 				curl_setopt($ch, CURLOPT_POST, TRUE);
-				curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $this->headers['params']);
 			}
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
 			$content = curl_exec($ch);
 			curl_close($ch);
 		} else {
-			$stream = stream_context_create();
+			$header = array(
+					'method' => $this->headers['method'],
+			);
+			if ($this->headers['method'] === 'POST') { //post方式
+				$header['header'] = 'Content-type: application/x-www-form-urlencoded'; 
+			}
+			$header['content'] = http_build_query($this->headers['params']);
+			$stream = stream_context_create(
+				'http' => $header
+			);
 			file_get_contents($this->headers['uri'], FALSE, $stream);
 		}
 		return	$content;
@@ -90,7 +103,7 @@ class Request {
 	* @return Void
 	*/
 	private function dispatch() {
-	
+
 	}
 	
 	private	function __construct($uri) {
