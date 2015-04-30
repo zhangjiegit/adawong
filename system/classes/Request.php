@@ -1,14 +1,15 @@
 <?php
 class Request {
-
-	//请求uri
-	private $uri = '';
 	
+	//相应内容
+	private	$body='';
+
 	//定义允许的请求方法
 	private $methods = array('GET', 'POST');
 
 	//请求报文
 	private $headers = array(
+		'uri' => '',
 		'method'=>'get',	
 	);
 
@@ -44,7 +45,7 @@ class Request {
 	* @return Ref
 	*/
 	public function execute() {
-		if (strpos($this->uri, $this->protocol) !== FALSE) {
+		if (strpos($this->headers['uri'], $this->protocol) !== FALSE) {
 			$this->external(); //内部请求
 		} else {
 			$this->internal(); //外部请求
@@ -96,6 +97,6 @@ class Request {
 	}
 	
 	private	function __construct($uri) {
-		$this->uri = $uri;
+		$this->headers['uri'] = $uri;
 	}
 }
