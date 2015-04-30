@@ -4,7 +4,11 @@ class	Ada_Route	extends	Ada_Wong {
 	private	$routes = array();
 
 	private $request = NULL;
-
+	
+	/**
+	* @param	Request	$request	request类实例	
+	* @return	Void
+	*/
 	public	function	__construct(Request $request) {
 		$this->request = $request;
 	}
@@ -20,12 +24,15 @@ class	Ada_Route	extends	Ada_Wong {
 	}
 
 	/**
-	* 
+	* 遍历路由信息，找出匹配的directory、controller、action及参数信息
 	*/
 	public	function	matchs() {
-		$uri = $this->request->uri;
 		foreach ($this->rules as $rule) {
 
 		}
+	}
+
+	public	function	__destruct() {
+		unset($this->routes);
 	}
 }
