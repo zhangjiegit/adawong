@@ -6,9 +6,14 @@ class Request {
 	
 	//请求方法
 	private $methods = array('get', 'post');
+
+	private	$instance = NULL;
 	
 	public static function factory() {
-		return	new Request();
+		if (self::$instance === NULL) {
+			self::$instance = new Request();
+		}
+		return	self::$instance;
 	}
 	
 	/**
@@ -16,7 +21,7 @@ class Request {
 	* @param String $method 请求方式
 	*/
 	public function method($method) {
-		return $this;
+		return	self::$instance;
 	}
 
 	/**
@@ -25,7 +30,7 @@ class Request {
 	* @return Ref
 	*/
 	public function execute() {
-	
+		return	self::$instance;
 	}
 
 	/**
@@ -47,4 +52,6 @@ class Request {
 	private function external () {
 	
 	}
+	
+	private	function __construct() {}
 }
