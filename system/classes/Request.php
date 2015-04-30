@@ -54,7 +54,7 @@ class Request {
 	}
 
 	/**
-	* 内部请求,请求系统内部uri
+	* 内部请求
 	* request::factory('welcome/say')->method()->execute()->body();
 	* @param Void
 	* @return Void
@@ -66,7 +66,7 @@ class Request {
 	}
 
 	/**
-	* 外部请求,请求指定uri
+	* 外部请求
 	* request::factory('http://www.baidu.com')->method()->execute()->body();
 	* @param Void
 	* @return Void
