@@ -8,17 +8,15 @@ class	Ada_Route	extends	Ada_Wong {
 	public	function	__construct(Request $request) {
 		$this->request = $request;
 	}
+
 	/**
-	* setting uri and pattern
-	* $this->routes(array(
-		array('(<directory>)-(<controller>)-(<action>)', #uri
-				array(),								 #pattrean
-				array()									 #defalt
-		),
-	* ))
+	* 设置路由信息
+	* @param	Array	$routes	路由信息
+	* @return	ref
 	*/
 	public	function	routes($routes=array()) {
 		$this->routes = $routes;
+		return	$this;
 	}
 
 	/**
