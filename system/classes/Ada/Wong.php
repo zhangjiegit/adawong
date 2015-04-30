@@ -19,6 +19,17 @@ abstract	class	Ada_Wong {
 	}
 
 	/**
+	* 载入文件
+	* @param String $file 文件名
+	* @param String $directory 目录
+	* @param String	$ext 扩展名
+	* @return Mixed
+	*/
+	public static function loadFile($file, $directory, $ext=NULL) {
+	
+	}
+
+	/**
 	* 自动载入类文件
 	* @param String $class 类名
 	* @return Boolean
