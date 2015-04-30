@@ -38,7 +38,7 @@ abstract	class	Ada_Wong {
 			if (!isset(self::$filePaths[$directory])) {
 				self::$filePaths[$directory] = array();
 			}
-			self::$filePaths[$directory][] = basename($file);
+			self::$filePaths[$directory][] = basename($file); //防止多次载入
 			include $file;
 			return	TRUE;
 		}
