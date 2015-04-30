@@ -1,8 +1,5 @@
 <?php
 class Request {
-	
-	//相应内容
-	private	$body='';
 
 	//定义允许的请求方法
 	private $methods = array('GET', 'POST');
@@ -46,11 +43,10 @@ class Request {
 	*/
 	public function execute() {
 		if (strpos($this->headers['uri'], $this->protocol) !== FALSE) {
-			$this->external(); //内部请求
+			return	$this->external(); //外部请求
 		} else {
-			$this->internal(); //外部请求
+			return	$this->internal(); //内部请求
 		}
-		return	self::$instance;
 	}
 
 	/**
@@ -72,19 +68,20 @@ class Request {
 	* @return Void
 	*/
 	private function external() {
-		$data = array();
 		if (extension_loaded('curl')) {  //curl
-			$ch = curl_init($this->uri);
+			$ch = curl_init($this->headers['uri']);
 			if ($this->headers['method'] === 'POST') {
 				curl_setopt($ch, CURLOPT_POST, TRUE);
 				curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 			}
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-			$this->body = curl_exec($ch);
+			$content = curl_exec($ch);
 			curl_close($ch);
-		} else { //file_get_contents、fsockopen
-			
+		} else {
+			$stream = stream_context_create();
+			file_get_contents($this->headers['uri'], FALSE, $stream);
 		}
+		return	$content;
 	}
 
 	/**
