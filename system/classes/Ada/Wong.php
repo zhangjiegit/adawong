@@ -22,7 +22,7 @@ abstract	class	Ada_Wong {
 				$path = '.';
 				$file = $class;
 			}
-			//遍历自动载入目录
+			//遍历目录，载入类文件
 			foreach (self::$loadPaths as $directory) {
 				$incfile = self::findFile($file, $directory.'classes'.DIRECTORY_SEPARATOR.$path,'.php');
 				if (!class_exists($class) && $incfile) {
