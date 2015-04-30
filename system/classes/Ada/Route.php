@@ -30,7 +30,7 @@ class	Ada_Route {
 	*			)
 	*		),
 	*		array( #匹配 http://localhost/index.php/list/3/1.html
-	*			(<action>)/(<category>)/(id).html',
+	*			(<action>)/(<category>)/(<id>).html',
 	*			array(
 	*				'controller'=>'(product)',
 	*				'action'=>'(list)'
