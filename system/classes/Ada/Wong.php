@@ -1,7 +1,7 @@
 <?php
 abstract	class	Ada_Wong {
 	
-	//注册自动文件载入目录
+	//注册文件自动载入目录
 	private	static $loadPaths = array(APPPATH, ADAPATH);
 	
 	//保存已载入文件
