@@ -1,19 +1,16 @@
 <?php
 class Request {
 
-	//定义允许的请求方法
-	private $methods = array('GET', 'POST');
-
-	//请求报文
-	private $headers = array(
-		'uri' => '',
-		'method' => 'get',
-		'params' => NULL,
-	);
-
+	//请求uri
+	private	static $uri = '';
+	//请求端口
+	private	static $port = 80;
+	//请求方法
+	private static $methods = array('GET', 'POST');
+	//请求参数
+	private	static $params = array();
 	//请求协议
-	private	$protocol = 'http';
-	
+	private	static $protocol = 'http';
 	//Singleton pattern
 	private	static $instance = NULL;
 	
@@ -21,22 +18,22 @@ class Request {
 		if (self::$instance === NULL) {
 			self::$instance = new Request($uri);
 		}
+		self::$uri = $uri;
 		return	self::$instance;
 	}
 	
 	/**
-	* 定义http协议请求方式,请求方式必须是包含在$this->methods属性内
+	* 定义http协议请求方式,方法必须是包含在$this->methods属性内
 	* @param String $method 请求方式
 	* @param Mixed	$params	请求参数
 	* @return Ref
 	*/
 	public function method($method='get', $params = NULL) {
 		$method = strtoupper($method);
-		if (!in_array($method, $this->methods)) {
+		if (!in_array($method, self::$methods)) {
 			throw new Ada_Exception('Request method error');
 		}
-		$this->headers['method'] = $method;
-		$this->headers['params'] = $params;
+		self::$params = $params;
 		return	self::$instance;
 	}
 
@@ -46,7 +43,7 @@ class Request {
 	* @return Ref
 	*/
 	public function execute() {
-		if (strpos($this->headers['uri'], $this->protocol) !== FALSE) {
+		if (strpos(self::$uri, self::$protocol) !== FALSE) {
 			return	$this->external(); //外部请求
 		} else {
 			return	$this->internal(); //内部请求
@@ -61,16 +58,14 @@ class Request {
 	*/
 	private function internal() {
 		//实例化一个路由
-		$route = new route($this);
-		$route->routes(array(
+		$this->dispatch(Route::factory()->routes(array(
 			array('(<action>)-(<category>).html',array(
 				'action'=>'(list)',
 				'category'=>'[\d]+'
-			),array())	
-		))->matchs();
-		$this->dispatch();
+			),array('controller'=>'welcome','action'=>'index','directory'=>'admin'))	
+		))->matchs(self::$uri));
 	}
-
+	
 	/**
 	* 外部请求
 	* request::factory('http://www.baidu.com')->method()->execute()->body();
@@ -106,12 +101,25 @@ class Request {
 	}
 
 	/**
-	* 使用反射进行调度
+	* 调度
 	* @param Void
 	* @return Void
 	*/
-	private function dispatch() {
-
+	private function dispatch($matchs) {
+		$path = 'Controller'.DIRECTORY_SEPARATOR;
+		if (isset($matchs['directory'])) {
+			$path = $path.$matchs['directory'].DIRECTORY_SEPARATOR;
+		}
+		$path = $path.$matchs['controller'];
+		$method = 'action_'.$matchs['action'];
+		$class = str_replace(DIRECTORY_SEPARATOR, '_', $path);
+		$refMethod = new ReflectionMethod($class, $method);
+		if($refMethod->ispublic()) {
+			$refMethod->invokeArgs(new	$class(), $matchs['params']);
+		} else {
+			throw	new	Ada_Exception("The requested URL ".self::$uri." was not found on this server");
+		}
+		unset($refMethod, $path, $method, $class);
 	}
 	
 	private	function __construct($uri) {

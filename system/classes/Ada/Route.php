@@ -1,17 +1,17 @@
 <?php
-class	Ada_Route {
+abstract class	Ada_Route {
 
 	//路由规则表
 	private $routes = array();
 
 	//
-	private $request = NULL;
-
-	/**
-	* @param Request $request Request对象实例
-	*/
-	public function __construct(Request &$request) {
-		$this->request = $request;
+	private	static	$instance = NULL;
+	
+	public static function factory() {
+		if (self::$instance === NULL) {
+			self::$instance = new Route();
+		}
+		return	self::$instance;
 	}
 
 	/**
@@ -53,7 +53,7 @@ class	Ada_Route {
 		if(is_array($routes)) {
 			$this->routes = $routes;
 		}
-		return $this;
+		return	self::$instance;
 	}
 	
 	/**
@@ -61,30 +61,61 @@ class	Ada_Route {
 	* @param Void
 	* @return Void
 	*/
-	public function matchs() {
+	public function matchs($uri) {
 		$matchs = array();
 		if ($this->routes) {
 			foreach ($this->routes as $rule) {
-				//定义正则捕获组名 如:(<action>)-(<category>)变成(?<action>)-(?<category>)
+				//定义正则捕获组名 如:(<action>)-(<category>)=>(?<action>)-(?<category>)
 				$pattern = preg_replace('/(?<=[(])(?=[<])/','?', $rule[0]);
-				//定义正则表达式字符范围 如:(?<action>)-(?<category>) 变成 (?<action>[\w]+)-(?<category>[\w]+)
-				if ($rule[1] && is_array($rule[1])) { //用户自定义字符
+				//定义正则表达式字符范围 如:(?<action>)-(?<category>) => (?<action>[\w]+)-(?<category>[\w]+)
+				if ($rule[1] && is_array($rule[1])) { //用户自定义字符范围
 					foreach ($rule[1] as $k => $v) {
 						$pattern = preg_replace('/(?<='.$k.'[>])(?=[)])/', $v, $pattern);
 					}
-				} else { //默认[\w]+
-					$pattern = preg_replace('/(?<=[>])(?=[)])/','[\w]+',$pattern);
+				} else { //默认字符范围[\w]+
+					$pattern = preg_replace('/(?<=[>])(?=[)])/', '[\w]+', $pattern);
 				}
-				//将当前路由规格与请求uri进行匹配，如果成功直接返回
-				if(preg_match("/^{$pattern}$/u", $this->request->headers['uri'], $matchs)) {
-					$this->request->route = $matchs;
+				//将当前路由规格与uri进行匹配
+				if(preg_match("/^{$pattern}$/u", $uri, $matchs)) { //成功匹配,交由Request处理
+					$default = array(); //默认路由规则
+					if ($rule[2]) {
+						$default = $rule[2];
+					}
+					return	$this->parse($matchs, $default);
 					break;
 				}
 			}
 		}
-		//都没有匹配，抛出异常
+		//所有路由规则匹配失败,抛出异常
 		if (!$matchs) {
 			throw	new	Ada_Exception('Unable to find a route to match');
 		}
 	}
+	
+	/**
+	* 解析路由规格及参数
+	* @param $matchs 路由规则
+	* @param $default 默认路由
+	* @return Array
+	*/
+	private	function parse($matchs, $default) {
+		$result = array();
+		foreach ($matchs as $k => $v) { 
+			//找出directory、controller、action
+			if (preg_match('/^\b(directory|controller|action)\b$/i', $k)) {
+				$result[$k] =  $v;
+			} else {
+				//找出请求参数
+				if (preg_match('/^[a-z]+$/i', $k)) {
+					$result['params'][$k] = $v;
+				}
+			}
+		}
+		unset($marchs);
+		$result = array_merge($default, $result);
+		return	$result;
+	}
+
+	//私有构造
+	private	function __construct() {}
 }
