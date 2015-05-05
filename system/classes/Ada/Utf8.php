@@ -9,6 +9,9 @@ abstract class Ada_Utf8 {
 	
 	//ascii字符编码范围
 	const ASCII = '[\x00-\x7f]';
+
+	//编码
+	const CHARSET = 'UTF-8';
 	
 	/**
 	* 判断字符是否为ascii字符
@@ -17,5 +20,80 @@ abstract class Ada_Utf8 {
 	*/
 	public static function isAscii($string) {
 		return preg_match('/^'.self::ASCII.'$/', $string);
+	}
+
+	/**
+	* 获取字符长度
+	* @param String $string 输入字符
+	* @return Int
+	*/
+	public static function strlen($string) {
+		if (function_exists('mb_strlen')) {
+			return mb_strlen($string, self::CHARSET);
+		} else if(function_exists('iconv_strlen')) {
+			return iconv_strlen($string, self::CHARSET);
+		} else {
+			$count = $index = 0;
+			$strlen = strlen($string);
+			while($index < $strlen) {
+				$index+=self::step(substr($string, $index, 1));
+				$count++;
+			}			
+			return $count;
+		}	
+	}
+	
+	/**
+	* 字符截取
+	* 从输入字符的{$start}位置开始截取{$length}个字符
+	* @param String $string 输入字符
+	* @param Int $start 开始位置
+	* @param Int $length 截取长度
+	* @return String
+	*/
+	public static function cutstr($string, $start=0, $length=NULL) {
+		if ($length == NULL) {
+			$length = self::strlen($string);
+		}
+		if (function_exists('mb_substr')) {
+			return mb_substr($string, $start, $length, self::CHARSET);
+		} else if(function_exists('iconv_substr')) {
+			return iconv_substr($string, $start, $length, self::CHARSET);
+		} else {
+			$count = $sbyte = $index = 0;
+			$strlen = $pstart = $pend = strlen($string);
+			while($index < $strlen) {
+				if ($count == $start) {
+					$pstart = $index;
+					$sbyte = $count;
+				}
+				if ($count-$sbyte >= $length) {
+					$pend = $index;
+					break;
+				}
+				$index+=self::step(substr($string, $index, 1));
+				$count++;
+			}			
+			return substr($string, $pstart, $pend-$pstart);
+		}
+	}
+
+	private static function step($string) {
+		$ord = ord($string);
+		if ($ord < 128) {
+			return 1;
+		} else if ($ord >= 192 && $ord <= 223) {
+			return 2;
+		} else if ($ord >= 224 && $ord <= 239) {
+			return 3;
+		} else if ($ord >= 240 && $ord <= 247) {
+			return 4;
+		} else if ($ord >= 248 && $ord <= 251) {
+			return 5;
+		} else if ($ord >= 251 && $ord <=253) {
+			return 6;
+		} else {
+			throw new Ada_Exception('Unrecognized character encoding');
+		}
 	}
 }

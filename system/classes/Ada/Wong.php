@@ -59,9 +59,9 @@ abstract class Ada_Wong {
 	*/
 	public static function autoLoad($class) {
 		$found = FALSE;
-		if (preg_match('/^(?:[a-z]+(?:_[a-z])*)+$/i', $class)) {
+		if (preg_match('/^(?:[a-z0-9]+(?:_[a-z0-9])*)+$/i', $class)) {
 			//$class = a_b_c, $path = a/b; $file=c.php
-			if(preg_match('/(?<path>(?:[a-z]+[_])+)(?<file>[a-z]+)/i', $class, $matchs)) {
+			if(preg_match('/(?<path>(?:[a-z0-9]+[_])+)(?<file>[a-z0-9]+)/i', $class, $matchs)) {
 				$path = rtrim(str_replace('_', DIRECTORY_SEPARATOR, $matchs['path']),DIRECTORY_SEPARATOR);
 				$file = $matchs['file'];
 			} else {
