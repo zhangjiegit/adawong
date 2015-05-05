@@ -1,6 +1,6 @@
 <?php if (!defined('ADAPATH')) die ('Access failure');
 /**
-* Utf8字符处理具体类
+* Utf8字符处理具体实现类
 * @package	AdaWong
 * @category	Base
 * @author	cyhy
@@ -30,6 +30,20 @@ abstract class Ada_Utf8 {
 	*/
 	public static function isMulti($string) {
 		return preg_match('/^(?:'.self::MULTI.')+$/', $string);
+	}
+
+	/**
+	* 获取字串在输入字符中出现的个数
+	* @param String $string 输入字符
+	* @parma String $child 字串
+	* @reutrn Int
+	*/
+	public static function count($string, $child) {
+		$count = 0;
+		if(preg_match_all("/(?:{$child})+?/u", $string, $matchs)) {
+			return count($matchs[0]);
+		}
+		return $count;
 	}
 
 	/**
