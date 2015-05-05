@@ -1,31 +1,31 @@
 <?php if (!defined('ADAPATH')) die ('Access failure');
 /**
-* ÇëÇó´¦ÀíÊµÏÖÀà
+* è¯·æ±‚å¤„ç†å®ç°ç±»
 * @package	AdaWong
 * @category	Base
 * @author	cyhy
 */
 abstract class Ada_Request {
 
-	//ÇëÇóuri
+	//è¯·æ±‚uri
 	protected	static $uri = '';
-	//ÇëÇó¶Ë¿Ú
+	//è¯·æ±‚ç«¯å£
 	protected	static $port = 80;
-	//ÏìÓ¦ÄÚÈİ
+	//å“åº”å†…å®¹
 	protected	static $body = '';
-	//ÇëÇó·½·¨
+	//è¯·æ±‚æ–¹æ³•
 	protected	static $methods = array('GET', 'POST');
-	//ÇëÇó²ÎÊı
+	//è¯·æ±‚å‚æ•°
 	protected	static $params = array();
-	//ÇëÇóĞ­Òé
+	//è¯·æ±‚åè®®
 	protected	static $protocol = 'http';
-	//±£´æµ¥Àı¶ÔÏó
+	//ä¿å­˜å•ä¾‹å¯¹è±¡
 	protected	static $instance = NULL;
 	
 	/**
-	* »ñÈ¡Ò»¸öÇëÇóÊµÀı
-	* ·µ»ØÒ»¸öRequestÊµÀı£¬¸ù¾İÈç¹ûÃ»ÓĞÖ¸¶¨uri»òÕßuriÃ»ÓĞ°üº¬http£¬ÔòÅĞ¶¨ÎªÄÚ²¿ÇëÇó£¬·ñÔòÅĞ¶¨ÎªÍâ²¿ÇëÇó
-	* @param String $uri ÇëÇóµÄuri
+	* è·å–ä¸€ä¸ªè¯·æ±‚å®ä¾‹
+	* è¿”å›ä¸€ä¸ªRequestå®ä¾‹ï¼Œæ ¹æ®å¦‚æœæ²¡æœ‰æŒ‡å®šuriæˆ–è€…uriæ²¡æœ‰åŒ…å«httpï¼Œåˆ™åˆ¤å®šä¸ºå†…éƒ¨è¯·æ±‚ï¼Œå¦åˆ™åˆ¤å®šä¸ºå¤–éƒ¨è¯·æ±‚
+	* @param String $uri è¯·æ±‚çš„uri
 	* @return Ref
 	*/
 	public static function factory($uri=NULL) {
@@ -37,9 +37,9 @@ abstract class Ada_Request {
 	}
 	
 	/**
-	* ¶¨ÒåhttpĞ­ÒéÇëÇó·½Ê½,·½·¨±ØĞëÊÇ°üº¬ÔÚ$this->methodsÊôĞÔÄÚ
-	* @param String $method ÇëÇó·½Ê½
-	* @param Mixed	$params	ÇëÇó²ÎÊı
+	* å®šä¹‰httpåè®®è¯·æ±‚æ–¹å¼,æ–¹æ³•å¿…é¡»æ˜¯åŒ…å«åœ¨$this->methodså±æ€§å†…
+	* @param String $method è¯·æ±‚æ–¹å¼
+	* @param Mixed	$params	è¯·æ±‚å‚æ•°
 	* @return Ref
 	*/
 	public function method($method='get', $params = NULL) {
@@ -52,20 +52,20 @@ abstract class Ada_Request {
 	}
 
 	/**
-	* ¸ù¾İuriÊÇ·ñ°üº¬http£¬È·¶¨Ö´ĞĞÄÚ²¿»òÕßÍâ²¿ÇëÇó
+	* æ ¹æ®uriæ˜¯å¦åŒ…å«httpï¼Œç¡®å®šæ‰§è¡Œå†…éƒ¨æˆ–è€…å¤–éƒ¨è¯·æ±‚
 	* @param Void
 	* @return Ref
 	*/
 	public function execute() {
 		if (strpos(self::$uri, self::$protocol) !== FALSE) {
-			return	$this->external(); //Íâ²¿ÇëÇó
+			return	$this->external(); //å¤–éƒ¨è¯·æ±‚
 		} else {
-			return	$this->internal(); //ÄÚ²¿ÇëÇó
+			return	$this->internal(); //å†…éƒ¨è¯·æ±‚
 		}
 	}
 
 	/**
-	* ÄÚ²¿ÇëÇó
+	* å†…éƒ¨è¯·æ±‚
 	* request::factory('welcome/say')->method()->execute()->body();
 	* @param Void
 	* @return Void
@@ -75,7 +75,7 @@ abstract class Ada_Request {
 	}
 	
 	/**
-	* Íâ²¿ÇëÇó
+	* å¤–éƒ¨è¯·æ±‚
 	* request::factory('http://www.baidu.com')->method()->execute()->body();
 	* @param Void
 	* @return Void
@@ -85,7 +85,7 @@ abstract class Ada_Request {
 	}
 	
 	/**
-	* »ñÈ¡µ±Ç°ÇëÇóµÄuri
+	* è·å–å½“å‰è¯·æ±‚çš„uri
 	* @param Void
 	* @return String
 	*/
@@ -100,15 +100,15 @@ abstract class Ada_Request {
 	}
 
 	/**
-	* ¹¹Ôì·½·¨
-	* @param String $uri ÇëÇóµÄuri
+	* æ„é€ æ–¹æ³•
+	* @param String $uri è¯·æ±‚çš„uri
 	*/
 	private	function __construct($uri) {
 		self::$uri = $uri;
 	}
 
 	/**
-	* ·µ»ØÏàÓ¦ĞÅÏ¢
+	* è¿”å›ç›¸åº”ä¿¡æ¯
 	*/
 	public function __toString(){
 		return self::$body;
