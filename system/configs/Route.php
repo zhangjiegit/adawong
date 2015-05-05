@@ -1,15 +1,10 @@
 <?php
 return	array(
 	array(
-		'(<action>)/(<category>).html',
-		array(
-			'action'=>'(list)',
-			'category'=>'[\d]+'
-		),
+		'(<controller>)/(<action>)',NULL,
 		array(
 			'controller'=>'welcome',
 			'action'=>'index',
-			'directory'=>'admin'
 		)
 	)
 );

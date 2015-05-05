@@ -64,34 +64,43 @@ abstract class	Ada_Route {
 	public function matchs($uri) {
 		$matchs = array();
 		if ($this->routes) {
-			foreach ($this->routes as $rule) {
-				//定义正则捕获组名 如:(<action>)-(<category>)=>(?<action>)-(?<category>)
-				$pattern = preg_replace('/(?<=[(])(?=[<])/','?', $rule[0]);
-				//定义正则表达式字符范围 如:(?<action>)-(?<category>) => (?<action>[\w]+)-(?<category>[\w]+)
-				if ($rule[1] && is_array($rule[1])) { //用户自定义字符范围
-					foreach ($rule[1] as $k => $v) {
-						$pattern = preg_replace('/(?<='.$k.'[>])(?=[)])/', $v, $pattern);
-					}
-				} else { //默认字符范围[\w]+
-					$pattern = preg_replace('/(?<=[>])(?=[)])/', '[\w]+', $pattern);
+			if ($uri == '') { //uri为空，则使用默认路由规则(路由规则表最后一项)
+				$rules = $this->routes[count($this->routes)-1];
+				if(isset($rules[2])) {
+					return	$rules[2];
 				}
-				//将当前路由规格与uri进行匹配
-				if(preg_match("~^{$pattern}~u", $uri, $matchs)) { //成功匹配,交由Request处理
-					$default = array(); //默认路由规则
-					if ($rule[2]) {
-						$default = $rule[2];
+			} else {
+				//遍历路由表规则，如果匹配其中一项，则退出
+				foreach ($this->routes as $rule) {
+					//定义正则捕获组名 如:(<action>)-(<category>)=>(?<action>)-(?<category>)
+					$pattern = preg_replace('/(?<=[(])(?=[<])/','?', $rule[0]);
+					//定义正则表达式字符范围 如:(?<action>)-(?<category>) => (?<action>[\w]+)-(?<category>[\w]+)
+					if ($rule[1] && is_array($rule[1])) { //用户自定义字符范围
+						foreach ($rule[1] as $k => $v) {
+							$pattern = preg_replace('/(?<='.$k.'[>])(?=[)])/', $v, $pattern);
+						}
+					} else { //默认字符范围[\w]+
+						$pattern = preg_replace('/(?<=[>])(?=[)])/', '[\w]+', $pattern);
 					}
-					return	$this->parse($matchs, $default);
-					break;
+					//将当前路由规格与uri进行匹配
+					if(preg_match("~^{$pattern}$~u", $uri, $matchs)) { //成功匹配,交由Request处理
+						$default = array(); //默认路由规则
+						if ($rule[2]) {
+							$default = $rule[2];
+						}
+						return	$this->parse($matchs, $default);
+						break;
+					}
 				}
 			}
+			
 		}
 		//所有路由规则匹配失败,抛出异常
 		if (!$matchs) {
 			throw	new	Ada_Exception('Unable to find a route to match');
 		}
 	}
-	
+
 	/**
 	* 解析路由规格及参数
 	* @param $matchs 路由规则

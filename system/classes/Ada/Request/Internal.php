@@ -21,7 +21,7 @@ class	Ada_Request_Internal	extends	Ada_Request {
 		}
 		$refMethod = new ReflectionMethod($class, $method);
 		if($refMethod->ispublic()) {
-			$refMethod->invokeArgs(new	$class(), $matchs['params']);
+			$refMethod->invokeArgs(new	$class(), isset($matchs['params']) ? $matchs['params'] : array());
 		} else {
 			throw	new	Ada_Exception("The requested URL ".self::$uri." was not found on this server");
 		}
