@@ -5,7 +5,7 @@
 * @category	Base
 * @author	cyhy
 */
-class	Ada_Crypt_Xor{
+class Ada_Crypt_Xor{
 	
 	/**
 	* 对明文进行加密
