@@ -1,5 +1,11 @@
-<?php
-abstract	class	Ada_Wong {
+<?php if (!defined('ADAPATH')) die ('Access failure');
+/**
+* 核心具体实现类
+* @package	AdaWong
+* @category	Base
+* @author	cyhy
+*/
+abstract class Ada_Wong {
 	
 	//文件自动载入目录
 	private	static $loadPaths = array(APPPATH, ADAPATH);
