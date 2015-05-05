@@ -1,7 +1,7 @@
 <?php
 return	array(
 	array(
-		'(<action>)-(<category>).html',
+		'(<action>)/(<category>).html',
 		array(
 			'action'=>'(list)',
 			'category'=>'[\d]+'

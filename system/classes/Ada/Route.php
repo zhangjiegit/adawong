@@ -76,7 +76,7 @@ abstract class	Ada_Route {
 					$pattern = preg_replace('/(?<=[>])(?=[)])/', '[\w]+', $pattern);
 				}
 				//将当前路由规格与uri进行匹配
-				if(preg_match("/^{$pattern}$/u", $uri, $matchs)) { //成功匹配,交由Request处理
+				if(preg_match("~^{$pattern}~u", $uri, $matchs)) { //成功匹配,交由Request处理
 					$default = array(); //默认路由规则
 					if ($rule[2]) {
 						$default = $rule[2];
