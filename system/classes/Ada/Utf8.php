@@ -78,6 +78,11 @@ abstract class Ada_Utf8 {
 		}
 	}
 
+	/**
+	* 获取字符字节个数
+	* @param String $string 输入字符
+	* @return Int
+	*/
 	private static function step($string) {
 		$ord = ord($string);
 		if ($ord < 128) {
