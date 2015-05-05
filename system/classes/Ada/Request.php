@@ -108,7 +108,7 @@ abstract class Ada_Request {
 	}
 
 	/**
-	* 返回相应信息
+	* 返回响应信息
 	*/
 	public function __toString(){
 		return self::$body;
