@@ -19,7 +19,7 @@ class Ada_Database_Driver_Mysql extends Ada_Database{
 	* @return Object Ada_Database_Result_SelectÊµÀý
 	*/
 	public function select($sql){
-
+		return new	Ada_Database_Result_Select();
 	}
 
 	public function update(){
@@ -34,7 +34,7 @@ class Ada_Database_Driver_Mysql extends Ada_Database{
 	
 	}
 
-	public function __construct(){
+	public function __destruct(){
 		
 	}
 }

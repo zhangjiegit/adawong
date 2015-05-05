@@ -10,7 +10,7 @@ abstract class Ada_Database {
 	/**
 	* 抽象查询方法,执行一个查询语句
 	*/
-	abstract public	function select();
+	abstract public	function select($sql);
 	
 	/**
 	* 抽象插入方法,执行一个插入语句
