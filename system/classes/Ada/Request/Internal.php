@@ -21,10 +21,14 @@ class	Ada_Request_Internal	extends	Ada_Request {
 		}
 		$refMethod = new ReflectionMethod($class, $method);
 		if($refMethod->ispublic()) {
+			ob_start();
 			$refMethod->invokeArgs(new	$class(), isset($matchs['params']) ? $matchs['params'] : array());
+			self::$body = ob_get_contents();
+			ob_end_clean();
 		} else {
 			throw	new	Ada_Exception("The requested URL ".self::$uri." was not found on this server");
 		}
 		unset($refMethod, $path, $method, $class);
+		ob_end_clean();
 	}
 }

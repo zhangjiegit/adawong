@@ -71,7 +71,7 @@ abstract class Ada_Request {
 	* @return Void
 	*/
 	private function internal() {
-		new	Ada_Request_Internal(Route::factory()->routes(Config::load('Route'))->matchs($this->uri()));
+		return new	Ada_Request_Internal(Route::factory()->routes(Config::load('Route'))->matchs($this->uri()));
 	}
 	
 	/**
@@ -81,7 +81,7 @@ abstract class Ada_Request {
 	* @return Void
 	*/
 	private function external() {
-		new	Ada_Request_External();
+		return new	Ada_Request_External();
 	}
 	
 	/**
