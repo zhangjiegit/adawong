@@ -1,10 +1,10 @@
 <?php if (!defined('ADAPATH')) die ('Access failure');
 /**
-* 模型类
+* 模型具体实现类
 * @package	AdaWong
 * @category	Base
 * @author	cyhy
 */
-class Model extends Ada_Model {
+abstract class Ada_Model {
 
 }
