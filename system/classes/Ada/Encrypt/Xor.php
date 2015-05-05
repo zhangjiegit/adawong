@@ -1,17 +1,17 @@
 <?php if (!defined('ADAPATH')) die ('Access failure');
 /**
-* ¼ÓÃÜ½âÃÜ¾ßÌåÊµÏÖÀà,Ê¹ÓÃÒì»òÔËËã
+* åŠ å¯†è§£å¯†å…·ä½“å®žçŽ°ç±»,ä½¿ç”¨å¼‚æˆ–è¿ç®—
 * @package	AdaWong
 * @category	Base
 * @author	cyhy
 */
-class Ada_Crypt_Xor{
+class Ada_Encrypt_Xor{
 	
 	/**
-	* ¶ÔÃ÷ÎÄ½øÐÐ¼ÓÃÜ
-	* @param	String	$encode	ÊäÈë×Ö·û
-	* @param	String	$secret	¼ÓÃÜÃØÔ¿
-	* @return	String	·µ»Ø¼ÓÃÜÖ®ºóµÄÃÜÎÄ
+	* å¯¹æ˜Žæ–‡è¿›è¡ŒåŠ å¯†
+	* @param	String	$encode	è¾“å…¥å­—ç¬¦
+	* @param	String	$secret	åŠ å¯†ç§˜é’¥
+	* @return	String	è¿”å›žåŠ å¯†ä¹‹åŽçš„å¯†æ–‡
 	*/
 	public	static	function	encode ($string, $secret) {
 		$text = '';
@@ -29,10 +29,10 @@ class Ada_Crypt_Xor{
 	}
 	
 	/**
-	* ¶ÔÃÜÎÄ½øÐÐ½âÃÜ
-	* @param	String	$encode	ÊäÈë×Ö·û
-	* @param	String	$secret	¼ÓÃÜÃØÔ¿
-	* @return	String	·µ»Ø½âÃÜÖ®ºóµÄÃ÷ÎÄ
+	* å¯¹å¯†æ–‡è¿›è¡Œè§£å¯†
+	* @param	String	$encode	è¾“å…¥å­—ç¬¦
+	* @param	String	$secret	åŠ å¯†ç§˜é’¥
+	* @return	String	è¿”å›žè§£å¯†ä¹‹åŽçš„æ˜Žæ–‡
 	*/
 	public	static	function	decode ($string, $secret) {
 		$text = '';
@@ -48,10 +48,10 @@ class Ada_Crypt_Xor{
 	}
 	
 	/**
-	* ¶ÔÃÜÎÄºÍÃØÔ¿½øÐÐ¼ÓÃÜ½âÃÜ
-	* @param	String	$string	ÃÜÎÄ
-	* @param	String	$secret	ÃØÔ¿
-	* @return	String	·µ»Ø¼ÓÃÜµÄÃÜÎÄ
+	* å¯¹å¯†æ–‡å’Œç§˜é’¥è¿›è¡ŒåŠ å¯†è§£å¯†
+	* @param	String	$string	å¯†æ–‡
+	* @param	String	$secret	ç§˜é’¥
+	* @return	String	è¿”å›žåŠ å¯†çš„å¯†æ–‡
 	*/
 	private	static	function	secret ($string, $secret) {
 		$text = '';
