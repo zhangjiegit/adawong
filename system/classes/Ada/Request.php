@@ -107,7 +107,9 @@ abstract class Ada_Request {
 		self::$uri = $uri;
 	}
 
-
+	/**
+	* 返回相应信息
+	*/
 	public function __toString(){
 		return self::$body;
 	}

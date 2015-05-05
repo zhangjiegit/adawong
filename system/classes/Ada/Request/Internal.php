@@ -29,6 +29,5 @@ class	Ada_Request_Internal	extends	Ada_Request {
 			throw	new	Ada_Exception("The requested URL ".self::$uri." was not found on this server");
 		}
 		unset($refMethod, $path, $method, $class);
-		ob_end_clean();
 	}
 }
