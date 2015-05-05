@@ -4,7 +4,7 @@ abstract class	Ada_Route {
 	//路由规则表
 	private $routes = array();
 
-	//
+	//保存单例对象
 	private	static	$instance = NULL;
 	
 	public static function factory() {
