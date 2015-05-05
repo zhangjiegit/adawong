@@ -1,6 +1,6 @@
 <?php if (!defined('ADAPATH')) die ('Access failure');
 /**
-* 加密解密具体实现类
+* 加密解密具体实现类,使用异或运算
 * @package	AdaWong
 * @category	Base
 * @author	cyhy
