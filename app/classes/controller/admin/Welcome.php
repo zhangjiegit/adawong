@@ -1,8 +1,7 @@
 <?php
-class	Controller_Admin_Welcome {
+class	Controller_Admin_Welcome extends Controller {
 	
 		public	function	action_list($category) {
-			echo $category;
+			echo time();
 		}
 }
-?>

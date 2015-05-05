@@ -1,8 +1,8 @@
 <?php if (!defined('ADAPATH')) die ('Access failure');
 /**
-* 路由处理类
+* 控制器类
 * @package	AdaWong
 * @category	Base
 * @author	cyhy
 */
-class Route extends Ada_Route {}
+class Controller extends Ada_Controller{}
