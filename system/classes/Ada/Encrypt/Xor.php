@@ -13,7 +13,7 @@ class Ada_Encrypt_Xor{
 	* @param	String	$secret	加密秘钥
 	* @return	String	返回加密之后的密文
 	*/
-	public	static	function	encode ($string, $secret) {
+	public static function encode($string, $secret) {
 		$text = '';
 		$index = $i = 0;
 		$count = array();
@@ -34,7 +34,7 @@ class Ada_Encrypt_Xor{
 	* @param	String	$secret	加密秘钥
 	* @return	String	返回解密之后的明文
 	*/
-	public	static	function	decode ($string, $secret) {
+	public static function decode($string, $secret) {
 		$text = '';
 		$index = 0;
 		$string = self::secret(base64_decode($string), $secret);
@@ -53,7 +53,7 @@ class Ada_Encrypt_Xor{
 	* @param	String	$secret	秘钥
 	* @return	String	返回加密的密文
 	*/
-	private	static	function	secret ($string, $secret) {
+	private static function	secret($string, $secret) {
 		$text = '';
 		$index = $i = 0;
 		$count = array();
