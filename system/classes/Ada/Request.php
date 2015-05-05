@@ -93,7 +93,9 @@ abstract class Ada_Request {
 		if (self::$uri != NULL) {
 			return	self::$uri;
 		} else {
-			return '';
+			$uri = $_SERVER['REQUEST_URI'];
+			$uri =  preg_replace(array('~'.$_SERVER['SCRIPT_NAME'].'~', '~(?<=[?]).*~'), '' , $uri);
+			return trim($uri,'/?');
 		}
 	}
 
