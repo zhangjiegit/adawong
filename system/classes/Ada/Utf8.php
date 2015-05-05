@@ -9,7 +9,8 @@ abstract class Ada_Utf8 {
 	
 	//ascii字符编码范围
 	const ASCII = '[\x00-\x7f]';
-
+	//多字节编码范围
+	const MULTI = '(?:[\xC0-\xDF]|[\xE0-\xEF]|[\xF0-\xF7]|[\xF8-\xFB]|[\xFC-\xFD])(?:[\x80-\xBF]{1,5})';
 	//编码
 	const CHARSET = 'UTF-8';
 	
@@ -20,6 +21,15 @@ abstract class Ada_Utf8 {
 	*/
 	public static function isAscii($string) {
 		return preg_match('/^'.self::ASCII.'$/', $string);
+	}
+	
+	/**
+	* 判断字符是否为多字节字符
+	* @param String $string 输入字符
+	* @return Bool
+	*/
+	public static function isMulti($string) {
+		return preg_match('/^(?:'.self::MULTI.')+$/', $string);
 	}
 
 	/**
