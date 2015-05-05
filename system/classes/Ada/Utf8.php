@@ -33,9 +33,9 @@ abstract class Ada_Utf8 {
 	}
 
 	/**
-	* 获取字串在输入字符中出现的个数
+	* 获取子串在输入字符中出现的个数
 	* @param String $string 输入字符
-	* @parma String $child 字串
+	* @parma String $child 子串
 	* @reutrn Int
 	*/
 	public static function count($string, $child) {
@@ -44,6 +44,18 @@ abstract class Ada_Utf8 {
 			return count($matchs[0]);
 		}
 		return $count;
+	}
+
+	/**
+	* 设置子串在输入字符中以指定颜色突出显示
+	* @param String $string 输入字符
+	* @param String $child 子串
+	* @return String
+	*/
+	public static function light($string, $child) {
+		return preg_replace_callback("/(?:{$child})/u", function($matchs) {
+			return '<font color="red">'.$matchs[0].'</font>';
+		}, $string);
 	}
 
 	/**
