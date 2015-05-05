@@ -1,6 +1,6 @@
 <?php if (!defined('ADAPATH')) die ('Access failure');
 /**
-* ÇëÇó´¦ÀíÀà
+* è¯·æ±‚å¤„ç†ç±»
 * @package	AdaWong
 * @category	Base
 * @author	cyhy
