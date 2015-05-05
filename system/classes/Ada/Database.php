@@ -27,5 +27,7 @@ abstract class Ada_Database {
 	*/
 	abstract public	function delete();
 
+	abstract protected function dblink();
+
 	protected	function __construct() {}
 }
