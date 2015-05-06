@@ -23,6 +23,10 @@ class Ada_Request_External extends Ada_Request {
 	*/
 	private	function curl() {
 		$ch = curl_init(self::$uri);
+		if (self::$method == 'POST') {
+			curl_setopt($ch, CURLOPT_POST, true);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, is_array(self::$params) ? self::$params : array());
+		}
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 		self::$body = curl_exec($ch);
 		curl_close($ch);
@@ -34,7 +38,7 @@ class Ada_Request_External extends Ada_Request {
 	private	function fsoc() {
 		$uri = str_ireplace('http://', '' , self::$uri);
 		$fp = fsockopen($uri, self::$port);
-		$out = "GET / HTTP/1.1\r\n";
+		$out = self::$method." / HTTP/1.1\r\n";
 		$out.= "Host:{$uri}\r\n";
 		$out.= "\r\n";
 		fwrite($fp, $out);

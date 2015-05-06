@@ -8,19 +8,21 @@
 abstract class Ada_Request {
 
 	//请求uri
-	protected	static $uri = '';
+	protected static $uri = '';
 	//请求端口
-	protected	static $port = 80;
+	protected static $port = 80;
 	//响应内容
-	protected	static $body = '';
+	protected static $body = '';
+	//定义允许的请求方法
+	protected static $methods = array('GET', 'POST');
 	//请求方法
-	protected	static $methods = array('GET', 'POST');
+	protected static $method = 'get';
 	//请求参数
-	protected	static $params = array();
+	protected static $params = array();
 	//请求协议
-	protected	static $protocol = 'http';
+	protected static $protocol = 'http';
 	//保存单例对象
-	protected	static $instance = NULL;
+	protected static $instance = NULL;
 	
 	/**
 	* 获取一个请求实例
@@ -47,6 +49,7 @@ abstract class Ada_Request {
 		if (!in_array($method, self::$methods)) {
 			throw new Ada_Exception('Request method error');
 		}
+		self::$method = $method;
 		self::$params = $params;
 		return	self::$instance;
 	}
