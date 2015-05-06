@@ -73,7 +73,7 @@ class Ada_Database_Driver_Mysql extends Ada_Database_Driver {
 	* @return Int
 	*/
 	public function lastId() {
-		return mysql_insert_id();
+		return mysql_insert_id($this->identity);
 	}
 
 	/**
