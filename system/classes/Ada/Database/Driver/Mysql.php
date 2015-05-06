@@ -11,7 +11,7 @@ class Ada_Database_Driver_Mysql extends Ada_Database_Driver {
 	private $config;
 	//Á´½Ó¾ä±ú
 	private $identity;
-	//
+	//resource
 	protected $resource;
 
 	public function __construct($config) {
