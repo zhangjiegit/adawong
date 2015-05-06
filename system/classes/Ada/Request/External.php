@@ -37,10 +37,18 @@ class Ada_Request_External extends Ada_Request {
 	private	function fsoc() {
 		$uri = str_ireplace('http://', '' , self::$uri);
 		preg_match('/(?<uri>(?:http:\/\/)?.+\.(?:com|cn))(?<url>\/.+)?/', $uri, $matchs);
+		$data = '';
+		if (self::$method == 'POST' && is_array(self::$params)) {
+			$data = http_build_query(self::$params);
+		}
 		$fp = fsockopen($matchs['uri'], self::$port);
 		$out = self::$method." ".$matchs['url']." HTTP/1.0 \r\n";
 		$out.= "Host:".$matchs['uri']."\r\n";
+		$out.= "Content-length:".strlen($data)."\r\n";
 		$out.= "\r\n";
+		if (self::$method == 'POST' && !empty($data)) {
+			$out.= $data;
+		}
 		fwrite($fp, $out);
 		while(!feof($fp)) {
 			self::$body.=fgets($fp);
