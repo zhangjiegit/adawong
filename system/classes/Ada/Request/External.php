@@ -8,14 +8,13 @@
 class Ada_Request_External extends Ada_Request {
 	
 	public function __construct() {
-		if (extension_loaded('curl')) {
+		if (!extension_loaded('curl')) {
 			$this->curl();
 		} else if (function_exists('fsockopen')) {
 			$this->fsoc();
 		} else {
 			$this->head();
 		}
-
 	}
 
 	/**
@@ -37,9 +36,10 @@ class Ada_Request_External extends Ada_Request {
 	*/
 	private	function fsoc() {
 		$uri = str_ireplace('http://', '' , self::$uri);
-		$fp = fsockopen($uri, self::$port);
-		$out = self::$method." / HTTP/1.1\r\n";
-		$out.= "Host:{$uri}\r\n";
+		preg_match('/(?<uri>(?:http:\/\/)?.+\.(?:com|cn))(?<url>\/.+)?/', $uri, $matchs);
+		$fp = fsockopen($matchs['uri'], self::$port);
+		$out = self::$method." ".$matchs['url']." HTTP/1.1\r\n";
+		$out.= "Host:".$matchs['uri']."\r\n";
 		$out.= "\r\n";
 		fwrite($fp, $out);
 		while(!feof($fp)) {
