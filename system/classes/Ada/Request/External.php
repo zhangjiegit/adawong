@@ -38,12 +38,12 @@ class Ada_Request_External extends Ada_Request {
 		$uri = str_ireplace('http://', '' , self::$uri);
 		preg_match('/(?<uri>(?:http:\/\/)?.+\.(?:com|cn))(?<url>\/.+)?/', $uri, $matchs);
 		$fp = fsockopen($matchs['uri'], self::$port);
-		$out = self::$method." ".$matchs['url']." HTTP/1.1\r\n";
+		$out = self::$method." ".$matchs['url']." HTTP/1.0 \r\n";
 		$out.= "Host:".$matchs['uri']."\r\n";
 		$out.= "\r\n";
 		fwrite($fp, $out);
 		while(!feof($fp)) {
-			echo self::$body.=fgets($fp);
+			self::$body.=fgets($fp);
 		}
 		fclose($fp);
 	}
