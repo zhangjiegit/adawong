@@ -80,12 +80,45 @@ class Ada_Database_Driver_Mysql extends Ada_Database_Driver {
 	* 返回影响的行数
 	* @param Void
 	* @return Int
-	*/
+	*/				
 	public function affect() {
 		return mysql_affected_rows($this->identity);
 	}
 
+	/**
+	* 开启事物
+	* @param Void
+	* @return Bool
+	*/
+	public function start() {
+		$this->dblink();
+		return $this->query("START transaction");
+	}
+	
+	/**
+	* 回滚事物
+	* @param Void
+	* @return Bool
+	*/
+	public function rollback() {
+		$this->dblink();
+		return $this->query("ROLLBACK");
+	}
+
+	/**
+	* 提交事物
+	* @param Void
+	* @return Bool
+	*/
+	public function commit() {
+		$this->dblink();
+		return $this->query("COMMIT");
+	}
+
 	private function dblink() {
+		if (is_resource($this->identity)) {
+			return TRUE;
+		}
 		if(!$this->identity = @mysql_connect($this->config['hostname'], $this->config['username'], $this->config['password'])) {
 			throw new Ada_Exception(mysql_error(), mysql_errno());
 		}
