@@ -66,7 +66,7 @@ abstract class Ada_Request {
 
 	/**
 	* 内部请求
-	* request::factory('welcome/say')->method()->execute()->body();
+	* request::factory('welcome/say')->method()->execute();
 	* @param Void
 	* @return Void
 	*/
@@ -76,7 +76,7 @@ abstract class Ada_Request {
 	
 	/**
 	* 外部请求
-	* request::factory('http://www.baidu.com')->method()->execute()->body();
+	* request::factory('http://www.baidu.com')->method()->execute();
 	* @param Void
 	* @return Void
 	*/
