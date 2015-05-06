@@ -3,8 +3,9 @@ return array(
 	'default'=>array(
 		'driver' => 'mysql',
 		'hostname'=>'localhost',
-		'username'=>'',
-		'password'=>'',
+		'username'=>'root',
+		'password'=>'123456',
+		'database'=>'test',
 		'charset'=>'utf8',
 	),
 );

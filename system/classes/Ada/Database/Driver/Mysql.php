@@ -5,40 +5,118 @@
 * @category	Base
 * @author	cyhy
 */
-class Ada_Database_Driver_Mysql extends Ada_Database{
-	
-	private $db;
+class Ada_Database_Driver_Mysql extends Ada_Database_Driver {
 
-	public function __construct() {
-	
+	//数据库配置信息
+	private $config;
+	//链接句柄
+	private $identity;
+	//
+	protected $resource;
+
+	public function __construct($config) {
+		$this->config = $config;
 	}
 
 	/**
 	* 执行一个查询语句
 	* @param String $sql 查询语句
-	* @return Object Ada_Database_Result_Select实例
+	* @return Object Ada_Database_Driver_Mysql_Result
 	*/
 	public function select($sql){
-		return new	Ada_Database_Result_Select($this);
+		$this->dblink();
+		$this->query($sql);
+		return new	Ada_Database_Driver_Mysql_Result($this->resource);
 	}
 
-	public function update(){
+	/**
+	* 执行一个插入语句
+	* @param String $table 数据库表名
+	* @param Array $params 插入数据,其中数组key作为字段名
+	* @return Bool
+	*/
+	public function insert($table, $params){
+		$this->dblink();
+		if ($this->query(Ada_Database_Query::InsertString($table, $params))) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
 	
+	/**
+	* 执行一个更新语句
+	* @param String $table 数据库表名
+	* @param Array $params 更新数据,其中数组key作为字段名
+	* @param String $where 更新条件
+	* @return Bool
+	*/
+	public function update($table, $params, $where=NULL){
+		$this->dblink();
+		return $this->query(Ada_Database_Query::updateString($table, $params, $where));
 	}
 
-	public function insert(){
-	
+	/**
+	* 执行一个删除语句
+	* @param String $table 数据库表名
+	* @param String $where 删除条件
+	* @return Bool
+	*/
+	public function delete($table, $where=NULL){
+		$this->dblink();
+		return $this->query(Ada_Database_Query::deleteString($table, $params, $where));
 	}
 
-	public function delete(){
-	
-	}
-	
-	protected function dblink(){
-		
+	/**
+	* 返回最后插入自增id
+	* @param Void
+	* @return Int
+	*/
+	public function lastId() {
+		return mysql_insert_id();
 	}
 
-	public function __destruct(){
-		
+	/**
+	* 返回影响的行数
+	* @param Void
+	* @return Int
+	*/
+	public function affect() {
+		return mysql_affected_rows($this->identity);
+	}
+
+	private function dblink() {
+		if(!$this->identity = @mysql_connect($this->config['hostname'], $this->config['username'], $this->config['password'])) {
+			throw new Ada_Exception(mysql_error(), mysql_errno());
+		}
+		$this->query("SET NAMES {$this->config['charset']}");
+		return TRUE;
+	}
+
+	/**
+	* 选择数据库
+	*/
+	private function choose() {
+		if(!mysql_select_db($this->config['database'])) {
+			throw new Ada_Exception(mysql_error(), mysql_errno());
+		}
+		return TRUE;
+	}
+	
+	/**
+	* 执行语句
+	*/
+	private function query($sql) {
+		$this->choose();
+		if(!$this->resource = mysql_query($sql, $this->identity)) {
+			throw new Ada_Exception(mysql_error(), mysql_errno());
+		}
+		return TRUE;
+	}
+
+	public function __destruct() {
+		if (is_resource($this->identity)) {
+			mysql_close($this->identity);
+		}
 	}
 }
