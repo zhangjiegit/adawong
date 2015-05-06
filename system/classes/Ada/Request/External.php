@@ -8,7 +8,7 @@
 class Ada_Request_External extends Ada_Request {
 	
 	public function __construct() {
-		if (!extension_loaded('curl')) {
+		if (extension_loaded('curl')) {
 			$this->curl();
 		} else if (function_exists('fsockopen')) {
 			$this->fsoc();
