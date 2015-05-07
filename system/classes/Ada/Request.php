@@ -79,7 +79,7 @@ abstract class Ada_Request {
 	private function internal() {
 		new	Ada_Request_Internal($this,Route::factory()
 			->routes(Config::load('Route'))
-			->matchs(Uri::url()));
+			->matchs(Uri::pathinfo()));
 	}
 	
 	/**
