@@ -16,13 +16,14 @@ abstract class Ada_Request {
 	//请求响应对象
 	protected $response = NULL;
 	//请求协议
-	protected static $protocol = 'http';
+	protected $protocol = 'http';
 	//定义允许的请求方法
-	protected static $methods = array('GET', 'POST');
+	protected $methods = array('GET', 'POST');
 	
 	/**
 	* 获取request请求对象
-	* 请求的url
+	* @param String $uri 请求的uri
+	* @return Request object
 	*/
 	public static function factory($uri=NULL) {
 		return new Request($uri);
@@ -46,7 +47,7 @@ abstract class Ada_Request {
 	*/
 	public function method($method='get', $params = NULL) {
 		$method = strtoupper($method);
-		if (!in_array($method, self::$methods)) {
+		if (!in_array($method, $this->methods)) {
 			throw new Ada_Exception('Request method error');
 		}
 		$this->method = $method;
@@ -55,12 +56,13 @@ abstract class Ada_Request {
 	}
 
 	/**
-	* 执行Http请求,根据设置的请求uri是否包含‘Http’,来判定是内部请求还是外部请求
+	* 执行Http请求,根据设置的请求uri是否包含‘Http’,
+	* 来判定是内部请求还是外部请求
 	* @param Void
 	* @return Response实例
 	*/
 	public function execute() {
-		if (stripos($this->uri, self::$protocol) !== FALSE) {
+		if (stripos($this->uri, $this->protocol) !== FALSE) {
 			$this->external(); //外部请求
 		} else {
 			$this->internal(); //内部请求
@@ -75,7 +77,9 @@ abstract class Ada_Request {
 	* @return Void
 	*/
 	private function internal() {
-		new	Ada_Request_Internal($this,Route::factory()->routes(Config::load('Route'))->matchs($this->uri()));
+		new	Ada_Request_Internal($this,Route::factory()
+			->routes(Config::load('Route'))
+			->matchs(Uri::factory()->url));
 	}
 	
 	/**
@@ -86,20 +90,5 @@ abstract class Ada_Request {
 	*/
 	private function external() {
 		new	Ada_Request_External($this);
-	}
-	
-	/**
-	* 在没有设置http请求uri时,系统判定为内部请求
-	* @param Void
-	* @return String
-	*/
-	private function uri() {
-		if ($this->uri != NULL) {
-			return	$this->uri;
-		} else {
-			$uri = $_SERVER['REQUEST_URI'];
-			$uri =  preg_replace(array('~'.$_SERVER['SCRIPT_NAME'].'~', '~(?<=[?]).*~'), '' , $uri);
-			return trim($uri,'/?');
-		}
 	}
 }
