@@ -1,12 +1,16 @@
 <?php
 return	array(
 	array(
-		'(<controller>)-(<action>)-(<category>)-(<page>)-(<keyword>).html',
-		array('keyword'=>'(.+)?')
-		,
+		'(<controller>)-(<category>)-(<page>)-(<keyword>).html',
 		array(
 			'controller'=>'welcome',
-			'action'=>'index',
+			'category'=>'[\d]+',
+			'page'=>'[\d]+',
+			'keyword'=>'(.+)?'
+		)
+		,
+		array(
+			'action'=>'index'
 		)
 	)
 );

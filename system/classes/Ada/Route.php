@@ -78,7 +78,7 @@ abstract class	Ada_Route {
 					$pattern = preg_replace('/(?<=[>])(?=[)])/', '[\w]+', $pattern);
 					if ($rule[1] && is_array($rule[1])) { //自定义字符范围
 						foreach ($rule[1] as $k => $v) {
-							$pattern = preg_replace('/(?<='.$k.'[>]).+(?=[)])/', $v, $pattern);
+							$pattern = preg_replace('/(?<=('.$k.')[>])\[\\\w\]\+(?=[)])/', $v, $pattern);
 						}
 					}
 					//将当前路由规格与uri进行匹配
