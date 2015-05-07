@@ -1,7 +1,7 @@
 <?php
 return	array(
-	array(
-		'(<controller>)-(<category>)-(<page>)-(<keyword>).html', //新闻列表页面
+	array( //新闻列表页面
+		'(<controller>)-(<category>)-(<page>)-(<keyword>).html',
 		array(
 			'controller'=>'welcome', //控制器
 			'category'=>'[\d]+', //新闻类别id
@@ -13,5 +13,12 @@ return	array(
 			'controller'=>'welcome',
 			'action'=>'index'
 		)
+	),
+	array( //首页,默认路由
+		'(<controller>)-(<action>)',NULL,
+		array(
+			'controller'=>'welcome',
+			'action'=>'index',
+		),
 	)
 );
