@@ -1,4 +1,12 @@
-<?php
+<?php if (!defined('ADAPATH')) die ('Access failure');
+/**
+* Uri处理实现类
+* Request::factory('welcome/say')->execute();
+* Request::factory('http://www.baidu.com')->method('get')->execute();
+* @package	AdaWong
+* @category	Base
+* @author	cyhy
+*/
 abstract class Ada_Uri {
 	
 	/**
