@@ -12,12 +12,19 @@ abstract class Ada_Uri {
 			$uri.= basename($_SERVER['SCRIPT_NAME']);
 		}
 		$url = preg_replace('#'.$_SERVER['SCRIPT_NAME'].'#', '', $uri);
-		preg_match('#(?<pathinfo>(?<=\/).+(?=[?]))#', $url, $matchs);
-		return (isset($matchs['pathinfo']) ? $matchs['pathinfo'] : '');
+		if (!empty($url)) {
+			$url = trim($url, '\/');
+			if (strpos($url, '?') !== FALSE) {
+				return preg_replace(array('#(?<=[?]).+#', '#[?]#'), '', $url);
+			} else {
+				return $url;
+			}
+		}
+		return '';
 	}
 
 	public static function baseInfo() {
-	
+		
 	}
 
 	public static function siteInfo() {
