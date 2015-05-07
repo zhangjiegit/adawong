@@ -90,7 +90,7 @@ abstract class	Ada_Route {
 					//将当前路由规格与uri进行匹配
 					if(preg_match("~^{$pattern}$~u", $uri, $matchs)) { //成功匹配,交由Request处理
 						$default = array(); //默认路由规则
-						if ($rule[2]) {
+						if (isset($rule[2])) {
 							$default = $rule[2];
 						}
 						return	$this->parse($matchs, $default);
