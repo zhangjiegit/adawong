@@ -2,7 +2,7 @@
 abstract class Ada_Uri {
 	
 	/**
-	* 获取pathinfo
+	* 获取pathinfo,http://www.adawong.cn/a/b/c => a/b/c
 	* @param Void
 	* @return String
 	*/
@@ -23,11 +23,25 @@ abstract class Ada_Uri {
 		return '';
 	}
 
-	public static function baseInfo() {
-		
+	/**
+	* 获取baseinfo,http://www.adawong.cn/a/b/c => http://www.adawong.cn/
+	* @param Void
+	* @return String
+	*/
+	public static function baseInfo($baseDir='/adawong') {
+		return 'http://'.(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME']).$baseDir;
 	}
-
-	public static function siteInfo() {
-		
+	
+	/**
+	* 设置url
+	* @param String $url 如果参数为空,返回pathinfo
+	* @return String
+	*/
+	public static function siteInfo($url=NULL) {
+		if ($url !== NULL) {
+			return self::baseInfo().'/'.func_get_arg(0);
+		} else {
+			return self::pathinfo();
+		}	
 	}
 }
