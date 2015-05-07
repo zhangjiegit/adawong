@@ -65,10 +65,7 @@ abstract class	Ada_Route {
 		$matchs = array();
 		if ($this->routes) {
 			if ($uri == '') { //uri为空，则使用默认路由规则(路由规则表最后一项)
-				$rules = $this->routes[count($this->routes)-1];
-				if(isset($rules[2])) {
-					return	$rules[2];
-				}
+				return $this->parse(NULL, NULL);
 			} else {
 				//遍历路由表规则，如果匹配其中一项，则退出
 				foreach ($this->routes as $rule) {
@@ -110,22 +107,35 @@ abstract class	Ada_Route {
 	* @param $default 默认路由
 	* @return Array
 	*/
-	private	function parse($matchs, $default) {
+	private	function parse($matchs=NULL, $default=NULL) {
 		$result = array();
-		foreach ($matchs as $k => $v) { 
-			//找出directory、controller、action
-			if (preg_match('/^\b(directory|controller|action)\b$/i', $k)) {
-				$result[$k] =  $v;
-			} else {
-				//找出请求参数
-				if (preg_match('/^[a-z]+$/i', $k)) {
-					$result['params'][$k] = $v;
+		if ($matchs) {
+			foreach ($matchs as $k => $v) { 
+				//找出directory、controller、action
+				if (preg_match('/^\b(directory|controller|action)\b$/i', $k)) {
+					$result[$k] =  $v;
+				} else {
+					//找出请求参数
+					if (preg_match('/^[a-z]+$/i', $k)) {
+						$result['params'][$k] = $v;
+					}
 				}
 			}
+			unset($marchs);
 		}
-		unset($marchs);
-		$result = array_merge($default, $result);
-		return	$result;
+		//默认路由
+		if ($default == NULL) {
+			if(isset($this->routes[count($this->routes)-1][2])) {
+				$default = $this->routes[count($this->routes)-1][2];
+			}
+			if (!isset($default['controller'])) {
+				$default['controller'] = 'index';
+			}
+			if (!isset($default['action'])) {
+				$default['action'] = 'index';
+			}
+		}
+		return array_merge($default, $result);
 	}
 
 	//私有构造
