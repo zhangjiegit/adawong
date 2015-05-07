@@ -20,7 +20,7 @@ abstract class Ada_Utf8 {
 	* @return Bool
 	*/
 	public static function isAscii($string) {
-		return preg_match('/^'.self::ASCII.'$/', $string);
+		return preg_match('/^(?:'.self::ASCII.')+$/', $string);
 	}
 	
 	/**

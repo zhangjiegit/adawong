@@ -2,7 +2,7 @@
 abstract class Ada_Uri {
 	
 	/**
-	* »ñÈ¡pathinfo
+	* è·å–pathinfo
 	* @param Void
 	* @return String
 	*/

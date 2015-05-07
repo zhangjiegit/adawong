@@ -81,6 +81,10 @@ abstract class	Ada_Route {
 							$pattern = preg_replace('/(?<=('.$k.')[>])\[\\\w\]\+(?=[)])/', $v, $pattern);
 						}
 					}
+					//判断$uri是包含多字节,如果包含,则需要转码
+					if (!Utf8::isAscii($uri)) {
+						$uri = iconv('gb2312', 'utf-8', $uri);
+					}
 					//将当前路由规格与uri进行匹配
 					if(preg_match("~^{$pattern}$~u", $uri, $matchs)) { //成功匹配,交由Request处理
 						$default = array(); //默认路由规则
