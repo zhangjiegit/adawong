@@ -76,7 +76,7 @@ abstract class	Ada_Route {
 					$pattern = preg_replace('/(?<=[(])(?=[<])/','?', $rule[0]);
 					//定义正则表达式字符范围 如:(?<action>)-(?<category>) => (?<action>[\w]+)-(?<category>[\w]+)
 					$pattern = preg_replace('/(?<=[>])(?=[)])/', '[\w]+', $pattern);
-					if ($rule[1] && is_array($rule[1])) { //用户自定义字符范围
+					if ($rule[1] && is_array($rule[1])) { //自定义字符范围
 						foreach ($rule[1] as $k => $v) {
 							$pattern = preg_replace('/(?<='.$k.'[>]).+(?=[)])/', $v, $pattern);
 						}
