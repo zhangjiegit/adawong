@@ -10,6 +10,7 @@ return	array(
 		)
 		,
 		array(
+			'controller'=>'welcome',
 			'action'=>'index'
 		)
 	)
