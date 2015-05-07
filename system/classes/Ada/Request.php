@@ -6,41 +6,39 @@
 * @author	cyhy
 */
 abstract class Ada_Request {
-
+	
 	//请求uri
-	protected static $uri = '';
-	//请求端口
-	protected static $port = 80;
-	//定义允许的请求方法
-	protected static $methods = array('GET', 'POST');
+	protected $uri = '';
 	//请求方法
-	protected static $method = 'get';
+	protected $method = 'get';
 	//请求参数
-	protected static $params = array();
+	protected $params = array();
+	//请求响应对象
+	protected $response = NULL;
 	//请求协议
 	protected static $protocol = 'http';
-	//保存单例对象
-	protected static $instance = NULL;
-	//请求响应对象
-	protected static $response = NULL;
+	//定义允许的请求方法
+	protected static $methods = array('GET', 'POST');
 	
 	/**
-	* 获取一个请求实例
-	* 返回一个Request实例
-	* @param String $uri Http请求的uri
-	* @return Ref
+	* 获取request请求对象
+	* 请求的url
 	*/
 	public static function factory($uri=NULL) {
-		if (self::$instance === NULL) {
-			self::$instance = new Request($uri);
-		}
-		self::$uri = $uri;
-		self::$response = new Response();
-		return	self::$instance;
+		return new Request($uri);
 	}
-	
+
 	/**
-	* 设置Http请求方法,该方法是允许的请求方法内
+	* 构造方法
+	* @param String $uri 请求的uri
+	*/
+	public function __construct($uri=NULL) {
+		$this->uri = $uri;
+		$this->response = new Response();
+	}
+
+	/**
+	* 设置Http请求方法
 	* use $this->methods 属性
 	* @param String $method 请求方式
 	* @param Mixed	$params	请求参数
@@ -51,23 +49,23 @@ abstract class Ada_Request {
 		if (!in_array($method, self::$methods)) {
 			throw new Ada_Exception('Request method error');
 		}
-		self::$method = $method;
-		self::$params = $params;
-		return	self::$instance;
+		$this->method = $method;
+		$this->params = $params;
+		return $this;
 	}
 
 	/**
 	* 执行Http请求,根据设置的请求uri是否包含‘Http’,来判定是内部请求还是外部请求
 	* @param Void
-	* @return Respnse实例
+	* @return Response实例
 	*/
 	public function execute() {
-		if (stripos(self::$uri, self::$protocol) !== FALSE) {
+		if (stripos($this->uri, self::$protocol) !== FALSE) {
 			$this->external(); //外部请求
 		} else {
 			$this->internal(); //内部请求
 		}
-		return self::$response;
+		return $this->response;
 	}
 
 	/**
@@ -77,7 +75,7 @@ abstract class Ada_Request {
 	* @return Void
 	*/
 	private function internal() {
-		return new	Ada_Request_Internal(Route::factory()->routes(Config::load('Route'))->matchs($this->uri()));
+		new	Ada_Request_Internal($this,Route::factory()->routes(Config::load('Route'))->matchs($this->uri()));
 	}
 	
 	/**
@@ -87,7 +85,7 @@ abstract class Ada_Request {
 	* @return Void
 	*/
 	private function external() {
-		return new	Ada_Request_External();
+		new	Ada_Request_External($this);
 	}
 	
 	/**
@@ -96,20 +94,12 @@ abstract class Ada_Request {
 	* @return String
 	*/
 	private function uri() {
-		if (self::$uri != NULL) {
-			return	self::$uri;
+		if ($this->uri != NULL) {
+			return	$this->uri;
 		} else {
 			$uri = $_SERVER['REQUEST_URI'];
 			$uri =  preg_replace(array('~'.$_SERVER['SCRIPT_NAME'].'~', '~(?<=[?]).*~'), '' , $uri);
 			return trim($uri,'/?');
 		}
-	}
-
-	/**
-	* 构造方法
-	* @param String $uri 请求的uri
-	*/
-	private	function __construct($uri) {
-		self::$uri = $uri;
 	}
 }
