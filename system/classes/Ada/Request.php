@@ -1,6 +1,6 @@
 <?php if (!defined('ADAPATH')) die ('Access failure');
 /**
-* 请求处理实现类
+* Http请求处理实现类
 * @package	AdaWong
 * @category	Base
 * @author	cyhy
@@ -11,8 +11,6 @@ abstract class Ada_Request {
 	protected static $uri = '';
 	//请求端口
 	protected static $port = 80;
-	//响应内容
-	protected static $body = '';
 	//定义允许的请求方法
 	protected static $methods = array('GET', 'POST');
 	//请求方法
@@ -23,11 +21,13 @@ abstract class Ada_Request {
 	protected static $protocol = 'http';
 	//保存单例对象
 	protected static $instance = NULL;
+	//请求响应对象
+	protected static $response = NULL;
 	
 	/**
 	* 获取一个请求实例
-	* 返回一个Request实例，根据如果没有指定uri或者uri没有包含http，则判定为内部请求，否则判定为外部请求
-	* @param String $uri 请求的uri
+	* 返回一个Request实例
+	* @param String $uri Http请求的uri
 	* @return Ref
 	*/
 	public static function factory($uri=NULL) {
@@ -35,11 +35,13 @@ abstract class Ada_Request {
 			self::$instance = new Request($uri);
 		}
 		self::$uri = $uri;
+		self::$response = new Response();
 		return	self::$instance;
 	}
 	
 	/**
-	* 定义http协议请求方式,方法必须是包含在$this->methods属性内
+	* 设置Http请求方法,该方法是允许的请求方法内
+	* use $this->methods 属性
 	* @param String $method 请求方式
 	* @param Mixed	$params	请求参数
 	* @return Ref
@@ -55,20 +57,21 @@ abstract class Ada_Request {
 	}
 
 	/**
-	* 根据uri是否包含http，确定执行内部或者外部请求
+	* 执行Http请求,根据设置的请求uri是否包含‘Http’,来判定是内部请求还是外部请求
 	* @param Void
-	* @return Ref
+	* @return Respnse实例
 	*/
 	public function execute() {
-		if (strpos(self::$uri, self::$protocol) !== FALSE) {
-			return	$this->external(); //外部请求
+		if (stripos(self::$uri, self::$protocol) !== FALSE) {
+			$this->external(); //外部请求
 		} else {
-			return	$this->internal(); //内部请求
+			$this->internal(); //内部请求
 		}
+		return self::$response;
 	}
 
 	/**
-	* 内部请求
+	* 执行内部请求
 	* request::factory('welcome/say')->method()->execute();
 	* @param Void
 	* @return Void
@@ -78,7 +81,7 @@ abstract class Ada_Request {
 	}
 	
 	/**
-	* 外部请求
+	* 执行外部请求
 	* request::factory('http://www.baidu.com')->method()->execute();
 	* @param Void
 	* @return Void
@@ -88,7 +91,7 @@ abstract class Ada_Request {
 	}
 	
 	/**
-	* 获取当前请求的uri
+	* 在没有设置http请求uri时,系统判定为内部请求
 	* @param Void
 	* @return String
 	*/
@@ -108,12 +111,5 @@ abstract class Ada_Request {
 	*/
 	private	function __construct($uri) {
 		self::$uri = $uri;
-	}
-
-	/**
-	* 返回响应信息
-	*/
-	public function __toString(){
-		return self::$body;
 	}
 }

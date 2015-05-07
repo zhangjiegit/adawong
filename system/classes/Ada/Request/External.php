@@ -27,7 +27,7 @@ class Ada_Request_External extends Ada_Request {
 			curl_setopt($ch, CURLOPT_POSTFIELDS, is_array(self::$params) ? self::$params : array());
 		}
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-		self::$body = curl_exec($ch);
+		self::$response->body(curl_exec($ch));
 		curl_close($ch);
 	}
 	
@@ -35,27 +35,29 @@ class Ada_Request_External extends Ada_Request {
 	* socket处理方式
 	*/
 	private	function fsoc() {
-		$uri = str_ireplace('http://', '' , self::$uri);
-		preg_match('/(?<uri>(?:http:\/\/)?.+\.(?:com|cn))(?<url>\/.+)?/', $uri, $matchs);
+		$uri = parse_url(self::$uri);
 		$data = '';
 		if (self::$method == 'POST' && is_array(self::$params)) {
 			$data = http_build_query(self::$params);
 		}
-		$fp = fsockopen($matchs['uri'], self::$port);
-		$out = self::$method." ".$matchs['url']." HTTP/1.0 \r\n";
-		$out.= "Host:".$matchs['uri']."\r\n";
+		$fp = fsockopen($uri['host'], self::$port);
+		$out = self::$method." ".$uri['path']." HTTP/1.0 \r\n";
+		$out.= "Host:".$uri['host']."\r\n";
 		$out.= "Content-length:".strlen($data)."\r\n";
 		$out.= "\r\n";
 		if (self::$method == 'POST' && !empty($data)) {
 			$out.= $data;
+			$out.="Content-type:application/x-www-form-urlencoded\r\n";
 		}
 		fwrite($fp, $out);
+		$body = '';
 		while(!feof($fp)) {
-			self::$body.=fgets($fp);
+			$body= fgets($fp);
 		}
 		fclose($fp);
+		Response::factory()->body($body);
 	}
-	
+
 	/**
 	* 自定义处理方式
 	*/
