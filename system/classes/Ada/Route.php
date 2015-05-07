@@ -98,7 +98,6 @@ abstract class	Ada_Route {
 					}
 				}
 			}
-			
 		}
 		//所有路由规则匹配失败,抛出异常
 		if (!$matchs) {
