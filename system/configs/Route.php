@@ -15,7 +15,7 @@ return	array(
 		)
 	),
 	array( //首页,默认路由
-		'(<controller>)-(<action>)',NULL,
+		'(<controller>)-(<action>).html',NULL,
 		array(
 			'controller'=>'welcome',
 			'action'=>'index',
