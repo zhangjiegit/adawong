@@ -7,6 +7,11 @@ abstract class	Ada_Route {
 	//保存单例对象
 	private	static	$instance = NULL;
 	
+	/**
+	* 获取一个路由对象
+	* @param Void
+	* @return Void
+	*/
 	public static function factory() {
 		if (self::$instance === NULL) {
 			self::$instance = new Route();
