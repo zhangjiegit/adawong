@@ -75,7 +75,7 @@ abstract class	Ada_Route {
 				//遍历路由表规则，如果匹配其中一项，则退出
 				foreach ($this->routes as $rule) {
 					//定义正则捕获组名 如:(<action>)-(<category>)=>(?<action>)-(?<category>)
-					$pattern = preg_replace('/(?<=[(])(?=[<])/','?', $rule[0]);
+					$pattern = preg_replace('/(?<=[(])(?=[<])/', '?', $rule[0]);
 					//定义正则表达式字符范围 如:(?<action>)-(?<category>) => (?<action>[\w]+)-(?<category>[\w]+)
 					$pattern = preg_replace('/(?<=[>])(?=[)])/', '[\w]+', $pattern);
 					if (isset($rule[1]) && is_array($rule[1])) { //自定义字符范围
