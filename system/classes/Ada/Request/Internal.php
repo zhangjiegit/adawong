@@ -35,13 +35,15 @@ class	Ada_Request_Internal	extends	Ada_Request {
 		unset($refObject);
 		//验证action是否存在
 		$controller = new $this->class($request);
-		$refMethod = new ReflectionMethod($controller, $this->action);
-		if ($refMethod->isPublic()) {
-			$request->response->body($this->invoke($controller, array('before', $this->action, 'after')));
-			unset($controller, $refMethod);
-		} else {
-			throw new Ada_Exception('The requested URL was not found on this server');
+		if (method_exists($controller, $this->action)) {
+			$refMethod = new ReflectionMethod($controller, $this->action);
+			if ($refMethod->isPublic()) {
+				$request->response->body($this->invoke($controller, array('before', $this->action, 'after')));
+				unset($controller, $refMethod);
+				return TRUE;
+			}
 		}
+		throw new Ada_Exception('The requested URL was not found on this server');
 	}
 	/**
 	* 匹配控制器和action
