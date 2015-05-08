@@ -103,7 +103,7 @@ abstract class Ada_Request {
 		if (isset($argument[1])) {
 			$default = $argument[1];
 		}
-		return this->postGets($_POST, $key, $default);
+		return $this->postGets($_POST, $key, $default);
 	}
 
 	/**
@@ -121,7 +121,7 @@ abstract class Ada_Request {
 		if (isset($argument[1])) {
 			$default = $argument[1];
 		}
-		return this->postGets($_GET, $key, $default);
+		return $this->postGets($_GET, $key, $default);
 	}
 
 	/**
