@@ -33,7 +33,7 @@ abstract class Ada_Utf8 {
 	}
 
 	/**
-	* 获取子串在输入字符中出现的个数
+	* 获取子串在输入字符中出现的次数
 	* @param String $string 输入字符
 	* @parma String $child 子串
 	* @reutrn Int
@@ -121,17 +121,17 @@ abstract class Ada_Utf8 {
 	*/
 	private static function step($string) {
 		$ord = ord($string);
-		if ($ord < 128) {
+		if ($ord < 128) { //1byte
 			return 1;
-		} else if ($ord >= 192 && $ord <= 223) {
+		} else if ($ord >= 192 && $ord <= 223) { //2byte
 			return 2;
-		} else if ($ord >= 224 && $ord <= 239) {
+		} else if ($ord >= 224 && $ord <= 239) { //3byte
 			return 3;
-		} else if ($ord >= 240 && $ord <= 247) {
+		} else if ($ord >= 240 && $ord <= 247) { //4byte
 			return 4;
-		} else if ($ord >= 248 && $ord <= 251) {
+		} else if ($ord >= 248 && $ord <= 251) { //5byte
 			return 5;
-		} else if ($ord >= 251 && $ord <=253) {
+		} else if ($ord >= 251 && $ord <= 253) { //6byte
 			return 6;
 		} else {
 			throw new Ada_Exception('Unrecognized character encoding');
