@@ -89,6 +89,42 @@ abstract class Ada_Request {
 	}
 
 	/**
+	* 获取post数据
+	* @param String $var  变量名称
+	* @param String $default 默认值
+	* @return Mixed
+	*/
+	public function input() {
+		$argument = func_get_args();
+		$key = $default = NULL;
+		if (isset($argument[0])) {
+			$key = $argument[0];
+		}
+		if (isset($argument[1])) {
+			$default = $argument[1];
+		}
+		return this->postGets($_POST, $key, $default);
+	}
+
+	/**
+	* 获取get数据
+	* @param String $var  变量名称
+	* @param String $default 默认值
+	* @return Mixed
+	*/
+	public function query() {
+		$argument = func_get_args();
+		$key = $default = NULL;
+		if (isset($argument[0])) {
+			$key = $argument[0];
+		}
+		if (isset($argument[1])) {
+			$default = $argument[1];
+		}
+		return this->postGets($_GET, $key, $default);
+	}
+
+	/**
 	* 执行内部请求
 	* request::factory('welcome/say')->method()->execute();
 	* @param Void
@@ -100,6 +136,19 @@ abstract class Ada_Request {
 			->matchs(Uri::pathinfo()));
 	}
 	
+	/**
+	* 
+	*/
+	private function postGets(Array $vars, $key=NULL, $default=NULL) {
+		if ($key && isset($vars[$key])) {
+			return $vars[$key];
+		} else if ($default) {
+			return $default;
+		} else {
+			return $vars;
+		}
+	}
+
 	/**
 	* 执行外部请求
 	* request::factory('http://www.baidu.com')->method()->execute();
