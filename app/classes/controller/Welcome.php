@@ -1,8 +1,12 @@
 <?php
-class	Controller_Welcome extends Controller {
+class Controller_Welcome extends Controller {
 	
-		public 	function	action_index() {
-			//获取参数
-			var_dump($this->request->params());
-		}
+	public function	action_index() {
+		//获取参数
+		var_dump($this->request->params());
+	}
+
+	public function action_say() {
+		echo 'hello world';
+	}
 }

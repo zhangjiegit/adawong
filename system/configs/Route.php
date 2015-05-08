@@ -18,7 +18,7 @@ return	array(
 		'(<controller>)-(<action>).html',NULL,
 		array(
 			'controller'=>'welcome',
-			'action'=>'index',
+			'action'=>'say',
 		),
 	)
 );
