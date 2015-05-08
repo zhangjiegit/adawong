@@ -20,7 +20,7 @@ class	Ada_Request_Internal	extends	Ada_Request {
 			throw new Ada_Exception('The requested URL was not found on this server');
 		}
 		$refObject = new ReflectionClass($this->class);
-		//验证控制类是访问权限
+		//验证控制类访问权限
 		if ($refObject->isAbstract()) {
 			throw new Ada_Exception('The requested URL was not found on this server');
 		}
