@@ -44,7 +44,7 @@ abstract class Ada_Request {
 	* @param String $method 请求方式
 	* @param Mixed	$params	请求参数
 	* @return Ref
-	*/
+	*/				
 	public function method($method='get', $params = NULL) {
 		$method = strtoupper($method);
 		if (!in_array($method, $this->methods)) {
@@ -53,6 +53,24 @@ abstract class Ada_Request {
 		$this->method = $method;
 		$this->params = $params;
 		return $this;
+	}
+
+	/**
+	* 获取请求参数;如果没有给出参数名称,将返回所有参数
+	* @param String 请求的参数名称
+	* @return Mixed
+	* 
+	*/
+	public function params() {
+		if(func_num_args() > 0) {
+			if (isset($this->params[func_get_arg(0)])) {
+				return	$this->params[func_get_arg(0)];
+			} else {
+				return NULL;
+			}
+		} else {
+			return $this->params;
+		}
 	}
 
 	/**

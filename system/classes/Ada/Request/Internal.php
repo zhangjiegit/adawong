@@ -7,27 +7,60 @@
 */
 class	Ada_Request_Internal	extends	Ada_Request {
 	
+	private $class;
+
+	private $action;
+	
+	/**
+	* 构造方法
+	*/
 	public	function	__construct(Request &$request, $matchs) {
+		$this->path($matchs);
+		if (!class_exists($this->class)) {
+			throw new Ada_Exception('The requested URL was not found on this server');
+		}
+		$refObject = new ReflectionClass($this->class);
+		//验证控制类是访问权限
+		if ($refObject->isAbstract()) {
+			throw new Ada_Exception('The requested URL was not found on this server');
+		}
+		//控制器类是否继承Controller
+		if (!$refObject->isSubclassOf('Controller')) {
+			throw new Ada_Exception('The requested URL was not found on this server');
+		}
+		unset($refObject);
+		//验证action是否存在
+		$controller = new $this->class();
+		if (!method_exists($controller, $this->action)) {
+			throw new Ada_Exception('The requested URL was not found on this server');
+		}
+		$refMethod = new ReflectionMethod($this->class, $this->action);
+		//验证action访问权限
+		if($refMethod->ispublic()) {
+			ob_start();
+			$refMethod->invokeArgs($controller, isset($matchs['params']) ? $matchs['params'] : array());
+			$request->response->body(ob_get_contents());
+			ob_end_clean();
+		} else {
+			throw	new	Ada_Exception('The requested URL was not found on this server');
+		}
+	}
+	/**
+	* 匹配控制器和action
+	* @param Array $matchs
+	* @return String
+	*/
+	private function path($matchs) {
 		$path = 'Controller'.DIRECTORY_SEPARATOR;
 		if (isset($matchs['directory'])) {
 			$path = $path.$matchs['directory'].DIRECTORY_SEPARATOR;
 		}
 		$path = $path.$matchs['controller'];
-		$method = 'action_'.$matchs['action'];
-		$class = str_replace(DIRECTORY_SEPARATOR, '_', $path);
-		$refObject = new ReflectionClass($class);
-		if ($refObject->getParentClass()->getName() != 'Controller') {
-			throw	new	Ada_Exception("The requested URL ".self::$uri." was not found on this server");
-		}
-		$refMethod = new ReflectionMethod($class, $method);
-		if($refMethod->ispublic()) {
-			ob_start();
-			$refMethod->invokeArgs(new	$class(), isset($matchs['params']) ? $matchs['params'] : array());
-			$request->response->body(ob_get_contents());
-			ob_end_clean();
-		} else {
-			throw	new	Ada_Exception("The requested URL ".self::$uri." was not found on this server");
-		}
-		unset($refMethod, $path, $method, $class);
+		$this->action = 'action_'.$matchs['action'];
+		$this->class = str_replace(DIRECTORY_SEPARATOR, '_', $path);
+	}
+
+	public function __destruct() {
+		unset($this->class, $this->action);
 	}
 }
