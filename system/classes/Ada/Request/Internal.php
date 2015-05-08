@@ -28,7 +28,10 @@ class	Ada_Request_Internal	extends	Ada_Request {
 		if (!$refObject->isSubclassOf('Controller')) {
 			throw new Ada_Exception('The requested URL was not found on this server');
 		}
-		$request->params = $matchs['params'];
+		//请求参数
+		if (isset($matchs['params'])) {
+			$request->params = $matchs['params'];
+		}
 		unset($refObject);
 		//验证action是否存在
 		$controller = new $this->class($request);
