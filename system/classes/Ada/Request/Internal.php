@@ -47,7 +47,7 @@ class	Ada_Request_Internal	extends	Ada_Request {
 			ob_end_clean();
 			unset($refMethod, $controller);
 		} else {
-			throw	new	Ada_Exception('The requested URL was not found on this server');
+			throw new Ada_Exception('The requested URL was not found on this server');
 		}
 	}
 	/**
