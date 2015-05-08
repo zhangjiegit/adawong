@@ -91,7 +91,7 @@ abstract class Ada_Request {
 	/**
 	* 获取post数据
 	* @param String $var  变量名称
-	* @param String $default 默认值
+	* @param Mixed $default 默认值
 	* @return Mixed
 	*/
 	public function input() {
@@ -109,7 +109,7 @@ abstract class Ada_Request {
 	/**
 	* 获取get数据
 	* @param String $var  变量名称
-	* @param String $default 默认值
+	* @param Mixed $default 默认值
 	* @return Mixed
 	*/
 	public function query() {
@@ -125,19 +125,11 @@ abstract class Ada_Request {
 	}
 
 	/**
-	* 执行内部请求
-	* request::factory('welcome/say')->method()->execute();
-	* @param Void
-	* @return Void
-	*/
-	private function internal() {
-		new	Ada_Request_Internal($this,Route::factory()
-			->routes(Config::load('Route'))
-			->matchs(Uri::pathinfo()));
-	}
-	
-	/**
-	* 
+	* 获取输入数据
+	* @param Array 数据
+	* @param String $key 变量名称
+	* @param Mixed 默认值
+	* @return Mixed
 	*/
 	private function postGets(Array $vars, $key=NULL, $default=NULL) {
 		if ($key) {
@@ -148,6 +140,18 @@ abstract class Ada_Request {
 			}
 		}
 		return $vars;
+	}
+
+	/**
+	* 执行内部请求
+	* request::factory('welcome/say')->method()->execute();
+	* @param Void
+	* @return Void
+	*/
+	private function internal() {
+		new	Ada_Request_Internal($this,Route::factory()
+			->routes(Config::load('Route'))
+			->matchs(Uri::pathinfo()));
 	}
 
 	/**
