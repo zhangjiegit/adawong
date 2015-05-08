@@ -1,11 +1,17 @@
 <?php
-class	Ada_Controller {
+class Ada_Controller {
 	
-	public	function	before() {
+	protected $request;
+
+	public function __construct(Request $request) {
+		$this->request = $request;
+	}
+
+	public function	before() {
 	
 	}
 
-	public	function	after(){
+	public function	after(){
 		
 	}
 }

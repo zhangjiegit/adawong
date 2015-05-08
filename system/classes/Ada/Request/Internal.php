@@ -28,9 +28,10 @@ class	Ada_Request_Internal	extends	Ada_Request {
 		if (!$refObject->isSubclassOf('Controller')) {
 			throw new Ada_Exception('The requested URL was not found on this server');
 		}
+		$request->params = $matchs['params'];
 		unset($refObject);
 		//验证action是否存在
-		$controller = new $this->class();
+		$controller = new $this->class($request);
 		if (!method_exists($controller, $this->action)) {
 			throw new Ada_Exception('The requested URL was not found on this server');
 		}
@@ -38,7 +39,7 @@ class	Ada_Request_Internal	extends	Ada_Request {
 		//验证action访问权限
 		if($refMethod->ispublic()) {
 			ob_start();
-			$refMethod->invokeArgs($controller, isset($matchs['params']) ? $matchs['params'] : array());
+			$refMethod->invoke($controller);
 			$request->response->body(ob_get_contents());
 			ob_end_clean();
 			unset($refMethod, $controller);

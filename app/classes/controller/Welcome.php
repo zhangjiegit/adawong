@@ -2,6 +2,7 @@
 class	Controller_Welcome extends Controller {
 	
 		public 	function	action_index() {
-			echo 'hello world';
+
+			var_dump($this->request->params());
 		}
 }
