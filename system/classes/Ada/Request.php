@@ -140,13 +140,14 @@ abstract class Ada_Request {
 	* 
 	*/
 	private function postGets(Array $vars, $key=NULL, $default=NULL) {
-		if ($key && isset($vars[$key])) {
-			return $vars[$key];
-		} else if ($default) {
-			return $default;
-		} else {
-			return $vars;
+		if ($key) {
+			if (isset($vars[$key])) {
+				return $vars[$key];
+			} else {
+				return $default;
+			}
 		}
+		return $vars;
 	}
 
 	/**
