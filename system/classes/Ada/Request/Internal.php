@@ -45,6 +45,7 @@ class	Ada_Request_Internal	extends	Ada_Request {
 		}
 		throw new Ada_Exception('The requested URL was not found on this server');
 	}
+
 	/**
 	* Æ¥Åä¿ØÖÆÆ÷ºÍaction
 	* @param Array $matchs
